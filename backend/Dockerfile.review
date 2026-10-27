@@ -1,0 +1,32 @@
+# Dockerfile pour le service de relecture (L14 / back-office)
+# Multi-stage build léger sans dépendance locale ni GPU
+
+FROM ghcr.io/astral-sh/uv:latest AS uv_bin
+FROM python:3.12-slim
+
+# Variables d'environnement de configuration
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_SYSTEM_PYTHON=1 \
+    PORT=8000 \
+    REVIEW_AUTH=local
+
+WORKDIR /app
+
+# Installation de uv
+COPY --from=uv_bin /uv /uvx /bin/
+
+# Installation des dépendances système nécessaires
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copie et installation du package Python csc
+COPY backend/pyproject.toml /app/backend/
+COPY backend/src /app/backend/src
+
+RUN uv pip install --system -e /app/backend
+
+EXPOSE 8000
+
+CMD ["sh", "-c", "csc review serve --host 0.0.0.0 --port ${PORT}"]

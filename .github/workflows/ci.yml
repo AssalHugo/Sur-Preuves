@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Lint, Typecheck, Tests (Local-first, sans API cloud)
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: csc
+          POSTGRES_PASSWORD: csc
+          POSTGRES_DB: csc
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U csc -d csc"
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      POSTGRES_USER: csc
+      POSTGRES_PASSWORD: csc
+      POSTGRES_DB: csc
+      POSTGRES_PORT: 5432
+      DATABASE_URL: postgresql+psycopg://csc:csc@127.0.0.1:5432/csc
+      LLM_MONTHLY_CAP_USD: 9
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: "latest"
+
+      - name: Set up Python 3.12
+        run: uv python install 3.12
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+          cache-dependency-path: "web/package-lock.json"
+
+      - name: Setup environment and dependencies
+        run: |
+          make setup
+
+      - name: Initialize pgvector extension
+        run: |
+          make db-migrate
+          uv run csc db status
+
+      - name: Run verification suite (make check)
+        run: |
+          make check
+
+      - name: Test POC skeleton pipeline
+        run: |
+          uv run csc ingest
+          uv run csc extract
+          uv run csc evidence
+          uv run csc synth
+          uv run csc verify
+          uv run csc publish bundle --include-drafts --poc
+          uv run csc backup create

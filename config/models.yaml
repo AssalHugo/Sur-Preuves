@@ -1,0 +1,40 @@
+# Configuration des modèles LLM et embeddings (L03 / L08)
+default_embedding_model: "intfloat/multilingual-e5-large"
+embedding_dimension: 1024
+
+roles:
+  extraction:
+    provider: "gemini"
+    model: "gemini-2.5-flash"  # Flash-Lite / 2.5 Flash
+    temperature: 0.0
+    max_output_tokens: 2048
+
+  evidence_query:
+    provider: "gemini"
+    model: "gemini-2.5-flash"
+    temperature: 0.0
+    max_output_tokens: 1024
+
+  synthesis_causal:
+    provider: "gemini"
+    model: "gemini-2.5-pro"  # Gemini Argon / Pro
+    temperature: 0.2
+    max_output_tokens: 8192
+
+  synthesis_factual:
+    provider: "gemini"
+    model: "gemini-2.5-flash"
+    temperature: 0.1
+    max_output_tokens: 4096
+
+  verification:
+    provider: "gemini"
+    model: "gemini-2.5-flash"
+    temperature: 0.0
+    max_output_tokens: 4096
+
+  stability_test:
+    provider: "gemini"
+    model: "gemini-2.5-pro"
+    temperature: 0.3
+    max_output_tokens: 8192
