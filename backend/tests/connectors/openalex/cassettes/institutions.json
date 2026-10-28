@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "count": 3,
+    "page": 1,
+    "per_page": 3
+  },
+  "results": [
+    {
+      "id": "https://openalex.org/I136199984",
+      "display_name": "Harvard University",
+      "country_code": "US",
+      "type": "education",
+      "ror": "https://ror.org/03vek6s52",
+      "works_count": 254120,
+      "cited_by_count": 8901234,
+      "homepage_url": "https://www.harvard.edu"
+    },
+    {
+      "id": "https://openalex.org/I241749",
+      "display_name": "University of Cambridge",
+      "country_code": "GB",
+      "type": "education",
+      "ror": "https://ror.org/013meh722",
+      "works_count": 198450,
+      "cited_by_count": 7234100,
+      "homepage_url": "https://www.cam.ac.uk"
+    },
+    {
+      "id": "https://openalex.org/I1294671590",
+      "display_name": "CNRS",
+      "country_code": "FR",
+      "type": "facility",
+      "ror": "https://ror.org/02feahw73",
+      "works_count": 312000,
+      "cited_by_count": 6890400,
+      "homepage_url": "https://www.cnrs.fr"
+    }
+  ]
+}

@@ -1,0 +1,641 @@
+{
+  "meta": {
+    "count": 10,
+    "db_response_time_ms": 45,
+    "page": 1,
+    "per_page": 10,
+    "next_cursor": null
+  },
+  "results": [
+    {
+      "id": "https://openalex.org/W3000000000",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2020.100",
+      "title": "Labor market impacts of carbon pricing: Systematic review #1",
+      "publication_year": 2015,
+      "type": "review",
+      "cited_by_count": 500,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2020.100"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999900",
+            "display_name": "Researcher A"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000001",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2021.101",
+      "title": "Labor market impacts of carbon pricing: Systematic review #2",
+      "publication_year": 2016,
+      "type": "review",
+      "cited_by_count": 460,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2021.101"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999901",
+            "display_name": "Researcher B"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000002",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2022.102",
+      "title": "Labor market impacts of carbon pricing: Systematic review #3",
+      "publication_year": 2017,
+      "type": "review",
+      "cited_by_count": 420,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2022.102"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999902",
+            "display_name": "Researcher C"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000003",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2023.103",
+      "title": "Labor market impacts of carbon pricing: Systematic review #4",
+      "publication_year": 2018,
+      "type": "review",
+      "cited_by_count": 380,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2023.103"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999903",
+            "display_name": "Researcher D"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000004",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2024.104",
+      "title": "Labor market impacts of carbon pricing: Systematic review #5",
+      "publication_year": 2019,
+      "type": "review",
+      "cited_by_count": 340,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2024.104"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999904",
+            "display_name": "Researcher E"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000005",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2025.105",
+      "title": "Labor market impacts of carbon pricing: Systematic review #6",
+      "publication_year": 2020,
+      "type": "review",
+      "cited_by_count": 300,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2025.105"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999905",
+            "display_name": "Researcher F"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000006",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2026.106",
+      "title": "Labor market impacts of carbon pricing: Systematic review #7",
+      "publication_year": 2021,
+      "type": "review",
+      "cited_by_count": 260,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2026.106"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999906",
+            "display_name": "Researcher G"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000007",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2027.107",
+      "title": "Labor market impacts of carbon pricing: Systematic review #8",
+      "publication_year": 2022,
+      "type": "review",
+      "cited_by_count": 220,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2027.107"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999907",
+            "display_name": "Researcher H"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000008",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2028.108",
+      "title": "Labor market impacts of carbon pricing: Systematic review #9",
+      "publication_year": 2015,
+      "type": "review",
+      "cited_by_count": 180,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2028.108"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999908",
+            "display_name": "Researcher I"
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://openalex.org/W3000000009",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2029.109",
+      "title": "Labor market impacts of carbon pricing: Systematic review #10",
+      "publication_year": 2016,
+      "type": "review",
+      "cited_by_count": 140,
+      "primary_location": {
+        "source": {
+          "display_name": "Ecological Economics"
+        },
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2029.109"
+      },
+      "abstract_inverted_index": {
+        "This": [
+          0
+        ],
+        "systematic": [
+          1
+        ],
+        "review": [
+          2
+        ],
+        "synthesizes": [
+          3
+        ],
+        "the": [
+          4
+        ],
+        "employment": [
+          5
+        ],
+        "effects": [
+          6
+        ],
+        "of": [
+          7
+        ],
+        "carbon": [
+          8
+        ],
+        "taxation": [
+          9
+        ],
+        "across": [
+          10
+        ],
+        "OECD": [
+          11
+        ],
+        "countries.": [
+          12
+        ]
+      },
+      "authorships": [
+        {
+          "author": {
+            "id": "https://openalex.org/A5099999909",
+            "display_name": "Researcher J"
+          }
+        }
+      ]
+    }
+  ]
+}
