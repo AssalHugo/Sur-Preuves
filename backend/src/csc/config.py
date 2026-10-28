@@ -32,6 +32,12 @@ class Settings(BaseSettings):
     gemini_api_key: str | None = None
     gemini_free_api_key: str | None = None
     llm_monthly_cap_usd: float = 9.0
+    models_config_path: Path = Field(default=Path("config/models.yaml"))
+    pricing_config_path: Path = Field(default=Path("config/pricing.yaml"))
+    prompts_dir: Path = Field(default=Path("prompts"))
+    llm_cache_dir: Path = Field(default=Path("var/cache/llm"))
+    models_cache_dir: Path = Field(default=Path("var/models"))
+    llm_debug: bool = False
 
     # Connecteurs
     openalex_api_key: str | None = None

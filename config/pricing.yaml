@@ -1,17 +1,78 @@
 # Grille tarifaire par million de tokens (USD)
+# Plafond mensuel interne par défaut (mois civil)
 monthly_hard_cap_usd: 9.0
 
 models:
-  "gemini-2.5-flash":
+  # Gemini 4 Argon : tarif réduit jusqu'au 30/11/2026, doublement au 01/12/2026
+  gemini-4-argon:
+    input_standard: 2.0
+    output_standard: 10.0
+    input_batch: 1.0
+    output_batch: 5.0
+    cached_standard: 0.20
+    cached_batch: 0.10
+    schedule:
+      - effective_date: "2026-12-01"
+        input_standard: 4.0
+        output_standard: 20.0
+        input_batch: 2.0
+        output_batch: 10.0
+        cached_standard: 0.40
+        cached_batch: 0.20
+
+  gemini-3.5-flash-lite:
     input_standard: 0.15
     output_standard: 1.25
     input_batch: 0.075
     output_batch: 0.625
     cached_standard: 0.0375
+    cached_batch: 0.01875
 
-  "gemini-2.5-pro":
+  gemini-3.1-flash-lite:
+    input_standard: 0.25
+    output_standard: 1.50
+    input_batch: 0.125
+    output_batch: 0.75
+    cached_standard: 0.05
+    cached_batch: 0.025
+
+  gemini-3.1-pro-preview:
+    input_standard: 2.0
+    output_standard: 12.0
+    input_batch: 1.0
+    output_batch: 6.0
+    cached_standard: 0.50
+    cached_batch: 0.25
+
+  gemini-3.8-flash:
+    input_standard: 0.30
+    output_standard: 2.50
+    input_batch: 0.15
+    output_batch: 1.25
+    cached_standard: 0.075
+    cached_batch: 0.0375
+    schedule:
+      - effective_date: "2027-01-01"
+        input_standard: 0.60
+        output_standard: 5.00
+        input_batch: 0.30
+        output_batch: 2.50
+        cached_standard: 0.15
+        cached_batch: 0.075
+
+  # Alias de repli / compatibilité
+  gemini-2.5-flash:
+    input_standard: 0.15
+    output_standard: 1.25
+    input_batch: 0.075
+    output_batch: 0.625
+    cached_standard: 0.0375
+    cached_batch: 0.01875
+
+  gemini-2.5-pro:
     input_standard: 2.0
     output_standard: 10.0
     input_batch: 1.0
     output_batch: 5.0
     cached_standard: 0.50
+    cached_batch: 0.25

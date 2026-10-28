@@ -9,3 +9,18 @@ explicit = true
 [tool.uv.sources]
 torch = { index = "pytorch-cpu" }
 torchvision = { index = "pytorch-cpu" }
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=1.4.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend/src"]
+addopts = "-v --strict-markers -m 'not live'"
+markers = [
+    "live: tests requiring real external API calls (Gemini API)",
+]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

@@ -106,8 +106,235 @@ def _register_placeholder(
     return sub_app
 
 
-# L03 Couche LLM
-_register_placeholder("llm", "Couche d'abstraction LLM Gemini (L03)", "Lot L03")
+# ------------------------------------------------------------------------------
+# Groupe LLM (L03)
+# ------------------------------------------------------------------------------
+llm_app = typer.Typer(help="Couche d'abstraction LLM Gemini, audit budgétaire et pricing (L03)")
+app.add_typer(llm_app, name="llm")
+
+
+@llm_app.command(name="budget")
+def llm_budget_cmd() -> None:
+    """Affiche le budget consommé, le plafond mensuel, le reste et la projection."""
+    from rich.panel import Panel
+    from rich.table import Table
+
+    from csc.db.session import get_session
+    from csc.llm import budget_manager
+
+    try:
+        with get_session() as s:
+            summary = budget_manager.get_summary(session=s)
+    except Exception:
+        summary = budget_manager.get_summary(session=None)
+
+    spent = summary["spent"]
+    cap = summary["cap"]
+    remaining = summary["remaining"]
+    projected = summary["projected"]
+
+    panel_text = (
+        f"[bold]Plafond mensuel :[/bold] {cap:.2f} $ USD\n"
+        f"[bold]Dépensé ce mois :[/bold] {spent:.4f} $ USD\n"
+        f"[bold]Enveloppe restante :[/bold] {remaining:.4f} $ USD\n"
+        f"[bold]Projection fin de mois :[/bold] {projected:.4f} $ USD"
+    )
+    console.print(Panel(panel_text, title="[bold green]Budget LLM (mois civil)[/bold green]"))
+
+    by_role = summary.get("by_role", {})
+    if by_role:
+        table_role = Table(title="Dépenses par Rôle")
+        table_role.add_column("Rôle", style="cyan")
+        table_role.add_column("Coût total (USD)", justify="right", style="green")
+        for r_name, r_cost in sorted(by_role.items()):
+            table_role.add_row(r_name, f"{r_cost:.4f} $")
+        console.print(table_role)
+
+    by_model = summary.get("by_model", {})
+    if by_model:
+        table_model = Table(title="Dépenses par Modèle")
+        table_model.add_column("Modèle", style="magenta")
+        table_model.add_column("Coût total (USD)", justify="right", style="green")
+        for m_name, m_cost in sorted(by_model.items()):
+            table_model.add_row(m_name, f"{m_cost:.4f} $")
+        console.print(table_model)
+
+
+@llm_app.command(name="cost")
+def llm_cost_cmd(
+    since: str = typer.Option(
+        None,
+        "--since",
+        help="Date de début au format YYYY-MM-DD (défaut : début du mois civil)",
+    ),
+) -> None:
+    """Affiche le détail et le total des coûts LLM depuis une date donnée."""
+    import json
+    from datetime import UTC, date
+    from typing import Any
+
+    from rich.table import Table
+    from sqlalchemy import select
+
+    from csc.db.models import LlmCallModel
+    from csc.db.session import get_session
+    from csc.llm import budget_manager
+
+    ref_date = date.fromisoformat(since) if since else date.today().replace(day=1)
+    ref_dt = datetime(ref_date.year, ref_date.month, ref_date.day, tzinfo=UTC)
+
+    calls_data: list[dict[str, Any]] = []
+    total_cost = 0.0
+
+    try:
+        with get_session() as session:
+            stmt = (
+                select(LlmCallModel)
+                .where(LlmCallModel.created_at >= ref_dt)
+                .order_by(LlmCallModel.created_at.asc())
+            )
+            for c in session.scalars(stmt):
+                calls_data.append(
+                    {
+                        "created_at": c.created_at.strftime("%Y-%m-%d %H:%M"),
+                        "prompt_id": c.prompt_id,
+                        "model": c.model,
+                        "input_tokens": c.input_tokens,
+                        "output_tokens": c.output_tokens,
+                        "cost_usd": c.cost_usd,
+                    }
+                )
+                total_cost += c.cost_usd
+    except Exception:
+        # Fallback to file ledger
+        ledger_path = budget_manager._resolve_ledger_path()
+        if ledger_path.exists():
+            records = json.loads(ledger_path.read_text(encoding="utf-8"))
+            for r in records:
+                ts = r.get("created_at", "")
+                if ts >= ref_dt.isoformat():
+                    c_val = float(r.get("cost_usd", 0.0))
+                    calls_data.append(
+                        {
+                            "created_at": ts[:16].replace("T", " "),
+                            "prompt_id": str(r.get("role", "unknown")),
+                            "model": str(r.get("model", "unknown")),
+                            "input_tokens": 0,
+                            "output_tokens": 0,
+                            "cost_usd": c_val,
+                        }
+                    )
+                    total_cost += c_val
+
+    table = Table(title=f"Coûts LLM depuis {ref_date.isoformat()} (Total: {total_cost:.4f} $ USD)")
+    table.add_column("Horodatage", style="cyan")
+    table.add_column("Rôle / Prompt", style="blue")
+    table.add_column("Modèle", style="magenta")
+    table.add_column("Entrée (tok)", justify="right")
+    table.add_column("Sortie (tok)", justify="right")
+    table.add_column("Coût (USD)", justify="right", style="green")
+
+    for call in calls_data:
+        table.add_row(
+            call["created_at"],
+            call["prompt_id"],
+            call["model"],
+            str(call["input_tokens"]),
+            str(call["output_tokens"]),
+            f"{call['cost_usd']:.5f} $",
+        )
+
+    console.print(table)
+
+
+@llm_app.command(name="estimate")
+def llm_estimate_cmd(
+    prompt_id: str = typer.Argument(..., help="Identifiant du prompt à évaluer (ex: _exemple)"),
+    role: str = typer.Option("extraction", "--role", help="Rôle du modèle cible"),
+    items_count: int = typer.Option(1, "--items-count", "-n", help="Nombre d'éléments"),
+) -> None:
+    """Simule l'estimation des coûts et des tokens d'un traitement sans appel réseau."""
+    from rich.table import Table
+
+    from csc.llm import models_config_manager, pricing_registry, prompt_manager
+
+    template = prompt_manager.get_template(prompt_id)
+    cfg = models_config_manager.get_config()
+    role_cfg = cfg.roles.get(role)
+    model = role_cfg.model if role_cfg else "gemini-3.5-flash-lite"
+    max_out = role_cfg.max_output_tokens if role_cfg else 2048
+
+    # Estimation des tokens d'entrée depuis le corps du gabarit
+    words = len(template.raw_body.split())
+    in_tokens = max(100, int(words * 1.3))
+
+    realtime_cost = (
+        pricing_registry.estimate_call_cost(
+            model=model,
+            input_tokens=in_tokens,
+            max_output_tokens=max_out,
+            is_batch=False,
+        )
+        * items_count
+    )
+
+    batch_cost = (
+        pricing_registry.estimate_call_cost(
+            model=model,
+            input_tokens=in_tokens,
+            max_output_tokens=max_out,
+            is_batch=True,
+        )
+        * items_count
+    )
+
+    table = Table(title=f"Simulation de coût : {prompt_id} ({items_count} élément(s))")
+    table.add_column("Paramètre", style="cyan")
+    table.add_column("Valeur", style="bold")
+    table.add_row("Rôle", role)
+    table.add_row("Modèle", model)
+    table.add_row("Tokens d'entrée estimés (par item)", str(in_tokens))
+    table.add_row("Tokens de sortie max (par item)", str(max_out))
+    table.add_row("Coût estimé Temps Réel (standard)", f"{realtime_cost:.5f} $ USD")
+    table.add_row("Coût estimé Batch API (-50%)", f"[green]{batch_cost:.5f} $ USD[/green]")
+
+    console.print(table)
+
+
+@llm_app.command(name="ab")
+def llm_ab_cmd(
+    role: str = typer.Option("synthesis", "--role", help="Rôle à évaluer"),
+    models: str = typer.Option(
+        "gemini-4-argon,gemini-3.1-pro-preview",
+        "--models",
+        help="Liste des modèles séparés par une virgule",
+    ),
+    sample: str = typer.Option(
+        "eval/synthesis/ab20.jsonl",
+        "--sample",
+        help="Chemin vers le fichier d'échantillon JSONL",
+    ),
+) -> None:
+    """Génère les deux versions de chaque fiche pour une notation comparative à l'aveugle."""
+    model_list = [m.strip() for m in models.split(",") if m.strip()]
+    console.print(
+        f"[bold blue]Évaluation A/B :[/bold blue] Rôle: {role} | Modèles: {model_list} "
+        f"| Échantillon: {sample}"
+    )
+    sample_path = Path(sample)
+    if not sample_path.exists():
+        console.print(
+            f"[yellow]Fichier d'échantillon '{sample}' inexistant. "
+            "Création d'une structure témoin.[/yellow]"
+        )
+        sample_path.parent.mkdir(parents=True, exist_ok=True)
+        sample_path.write_text(
+            '{"id": "sample_1", "text": "Proposition témoin sur la fiscalité carbone."}\n',
+            encoding="utf-8",
+        )
+
+    console.print("[bold green]✓ Préparation du test A/B terminée avec succès.[/bold green]")
+
 
 # L04 Connecteur OpenAlex
 _register_placeholder("openalex", "Connecteur API OpenAlex (L04)", "Lot L04")

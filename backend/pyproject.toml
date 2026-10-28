@@ -15,6 +15,9 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "rich>=13.7.0",
     "pyyaml>=6.0.1",
+    "google-genai>=2.33.0",
+    "jinja2>=3.1.6",
+    "fastembed>=0.9.1",
 ]
 
 [project.optional-dependencies]
@@ -86,4 +89,9 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-addopts = "-v --strict-markers"
+addopts = "-v --strict-markers -m 'not live'"
+markers = [
+    "live: tests requiring real external API calls (Gemini API)",
+]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
