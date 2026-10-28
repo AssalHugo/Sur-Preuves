@@ -1,0 +1,29 @@
+version: "1.0.0"
+groups:
+  - id: "ECO-SOL"
+    name: "Groupe Écologiste et Social"
+    short_name: "Écologistes"
+    chamber: "assemblee"
+    associated_parties:
+      - "PES"
+    associated_candidates:
+      - "claire-delacroix"
+    description: "Groupe parlementaire portant les propositions écologistes et de justice climatique."
+  - id: "REP-DEM"
+    name: "Groupe Républicain et Démocrate"
+    short_name: "Républicains & Démocrates"
+    chamber: "assemblee"
+    associated_parties:
+      - "RRD"
+    associated_candidates:
+      - "alexandre-leroy"
+    description: "Groupe centriste et libéral soutenant la modernisation économique."
+  - id: "PROG-INNOV"
+    name: "Groupe Progrès, Recherche et Innovation"
+    short_name: "Progrès & Innovation"
+    chamber: "assemblee"
+    associated_parties:
+      - "PMI"
+    associated_candidates:
+      - "mariam-diallo"
+    description: "Groupe axé sur les investissements scientifiques et l'innovation sociale."

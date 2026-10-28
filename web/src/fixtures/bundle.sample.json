@@ -1,0 +1,1040 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-10-28T10:00:00Z",
+  "candidates": [
+    {
+      "id": "0192d1c0-0001-7000-8000-000000000001",
+      "slug": "claire-delacroix",
+      "name": "Claire Delacroix",
+      "parties": [
+        "PES"
+      ],
+      "parliamentary_group_id": "ECO-SOL",
+      "status": "declared",
+      "photo_url": "/images/candidates/claire-delacroix.jpg"
+    },
+    {
+      "id": "0192d1c0-0002-7000-8000-000000000002",
+      "slug": "alexandre-leroy",
+      "name": "Alexandre Leroy",
+      "parties": [
+        "RRD"
+      ],
+      "parliamentary_group_id": "REP-DEM",
+      "status": "declared",
+      "photo_url": "/images/candidates/alexandre-leroy.jpg"
+    },
+    {
+      "id": "0192d1c0-0003-7000-8000-000000000003",
+      "slug": "mariam-diallo",
+      "name": "Mariam Diallo",
+      "parties": [
+        "PMI"
+      ],
+      "parliamentary_group_id": "PROG-INNOV",
+      "status": "official",
+      "photo_url": "/images/candidates/mariam-diallo.jpg"
+    }
+  ],
+  "themes": [
+    {
+      "id": "economie-emploi",
+      "label": "Économie & Emploi",
+      "description": "Marché du travail, emploi, salaires, compétitivité des entreprises et réindustrialisation."
+    },
+    {
+      "id": "fiscalite",
+      "label": "Fiscalité & Finances publiques",
+      "description": "Impôts, prélèvements obligatoires, dette souveraine et redistribution fiscale."
+    },
+    {
+      "id": "retraites",
+      "label": "Retraites",
+      "description": "Équilibre des régimes, âge de départ, carrières longues et pénibilité au travail."
+    },
+    {
+      "id": "sante",
+      "label": "Santé",
+      "description": "Hôpital public, accès aux soins, déserts médicaux, santé mentale et prévention."
+    },
+    {
+      "id": "education",
+      "label": "Éducation & Recherche",
+      "description": "Système scolaire primaire et secondaire, enseignement supérieur et investissement dans la recherche."
+    },
+    {
+      "id": "energie",
+      "label": "Énergie",
+      "description": "Mix électrique, nucléaire, énergies renouvelables et sobriété énergétique."
+    },
+    {
+      "id": "climat",
+      "label": "Climat & Biodiversité",
+      "description": "Trajectoire de décarbonation, atténuation, adaptation au changement climatique et préservation des écosystèmes."
+    },
+    {
+      "id": "agriculture",
+      "label": "Agriculture & Alimentation",
+      "description": "Revenus agricoles, souveraineté alimentaire, pesticides et transition agroécologique."
+    },
+    {
+      "id": "logement",
+      "label": "Logement",
+      "description": "Accès au logement, rénovation thermique, encadrement des loyers et construction neuve."
+    },
+    {
+      "id": "securite-justice",
+      "label": "Sécurité & Justice",
+      "description": "Moyens de la justice, surpopulation carcérale, maintien de l'ordre et prévention de la délinquance."
+    },
+    {
+      "id": "immigration",
+      "label": "Immigration & Asile",
+      "description": "Politique migratoire, droit d'asile, intégration et régulation des flux."
+    },
+    {
+      "id": "transport",
+      "label": "Transports & Mobilités",
+      "description": "Réseau ferroviaire, mobilités actives, véhicule électrique et infrastructures autoroutières."
+    },
+    {
+      "id": "numerique",
+      "label": "Numérique & Technologies",
+      "description": "Intelligence artificielle, régulation des plateformes numériques, souveraineté logicielle et cybersécurité."
+    },
+    {
+      "id": "institutions",
+      "label": "Institutions & Vie démocratique",
+      "description": "Réforme constitutionnelle, proportionnelle, référendum d'initiative citoyenne et fonctionnement parlementaire."
+    },
+    {
+      "id": "europe-international",
+      "label": "Europe & International",
+      "description": "Politique européenne, souveraineté diplomatique, traités de libre-échange et défense."
+    }
+  ],
+  "assessments": [
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000001",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000001",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": "accurate",
+      "consensus_level": null,
+      "evidence_direction": "supports",
+      "sms_max": 3,
+      "summary": "Le chiffre de baisse de 5,8 % des émissions de GES en 2023 correspond exactement aux données du Citepa consolidées en 2024.",
+      "sections": {
+        "diagnostic": "Les émissions nettes de gaz à effet de serre en France ont atteint 373 Mt CO2e en 2023.",
+        "mechanism": "La baisse provient principalement de la réouverture des réacteurs nucléaires et des économies de chauffage.",
+        "evidence": "Le Citepa et les inventaires nationaux indépendants confirment un recul de 5,8 % entre 2022 et 2023.",
+        "blind_spots": "Une partie de la baisse découle d'un hiver particulièrement doux et du ralentissement industriel conjoncturel.",
+        "success_conditions": "Le rythme annuel de décarbonation devra atteindre 4,5 % chaque année jusqu'en 2030 pour respecter les objectifs européens.",
+        "controversies": "Débat méthodologique sur la part imputable aux politiques publiques pérennes par rapport aux facteurs conjoncturels."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000001",
+          "text": "Le chiffre de baisse de 5,8 % des émissions de GES en 2023 correspond exactement aux données du Citepa consolidées en 2024. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000001"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000002",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000001",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000001",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000002",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000002",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000002",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": null,
+      "consensus_level": "strong",
+      "evidence_direction": "supports",
+      "sms_max": 4,
+      "summary": "La littérature confirme avec un haut degré de confiance que la taxation du kérosène provoque un report vers le train sur les trajets de moins de 4 heures.",
+      "sections": {
+        "diagnostic": "L'aviation domestique bénéficie d'une exonération historique de TICPE et de TVA sur les liaisons internationales.",
+        "mechanism": "Le renchérissement du prix des billets aériens modifie l'arbitrage temps-prix des voyageurs professionnels et loisirs.",
+        "evidence": "Des études quasi-expérimentales européennes mesurent une élasticité-prix de -0,8 et un report modal de 40 % à 60 % vers le rail.",
+        "blind_spots": "Risque de report partiel vers l'automobile individuelle sur les liaisons transversales mal desservies en TGV.",
+        "success_conditions": "Nécessite une offre ferroviaire cadencée, capacitive et des tarifs compétitifs pour éviter l'enclavement territorial.",
+        "controversies": "Modalités d'affectation des recettes fiscales au financement des infrastructures ferroviaires secondaires."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000003",
+          "text": "La littérature confirme avec un haut degré de confiance que la taxation du kérosène provoque un report vers le train sur les trajets de moins de 4 heures. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000002"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000004",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000002",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000002",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000002",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000003",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000003",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": null,
+      "consensus_level": "contested",
+      "evidence_direction": "mixed",
+      "sms_max": 5,
+      "summary": "L'impact sur les rendements agricoles varie fortement selon les filières : nul à faible sur les céréales, marqué et contesté sur la betterave sucrière.",
+      "sections": {
+        "diagnostic": "L'interdiction des néonicotinoïdes vise à préserver les pollinisateurs et la biodiversité entomologique.",
+        "mechanism": "Le retrait de la protection phytosanitaire systémique accroît l'exposition aux attaques d'insectes ravageurs.",
+        "evidence": "Une méta-analyse montre que 65 % des cultures compensent les pertes par la biodiversité, mais la betterave subit jusqu'à 20 % de pertes en l'absence d'alternatives.",
+        "blind_spots": "Fragilisation économique à court terme des exploitants mono-cultivateurs et risque d'importation de sucre non soumis aux mêmes normes.",
+        "success_conditions": "Disponibilité de semences tolérantes et accompagnement financier transitoire des assolements diversifiés.",
+        "controversies": "Divergences majeures entre les modèles agronomiques d'Inrae et les syndicats agricoles de grandes cultures."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000005",
+          "text": "L'impact sur les rendements agricoles varie fortement selon les filières : nul à faible sur les céréales, marqué et contesté sur la betterave sucrière. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000003"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000006",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000003",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000003",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000001",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000004",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000004",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": "inaccurate",
+      "consensus_level": null,
+      "evidence_direction": "contradicts",
+      "sms_max": 2,
+      "summary": "L'affirmation est fausse : la part des produits biologiques dans la restauration collective publique ne s'élève qu'à 13 % en 2023, loin des 25 % annoncés.",
+      "sections": {
+        "diagnostic": "La loi EGAlim fixait un objectif de 20 % de produits bio au 1er janvier 2022.",
+        "mechanism": "Les surcoûts d'approvisionnement et le manque de structuration des filières locales freinent l'atteinte des quotas.",
+        "evidence": "L'Observatoire national de la restauration collective évalue la part réelle moyenne à 13,2 % fin 2023.",
+        "blind_spots": "Fortes disparités entre les grandes métropoles (parfois à 35 %) et les petites communes rurales (souvent sous 10 %).",
+        "success_conditions": "Revalorisation des budgets municipaux par repas et commande publique mutualisée.",
+        "controversies": "Débat sur la prise en compte des labels HVE en substitution des produits certifiés bio."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000007",
+          "text": "L'affirmation est fausse : la part des produits biologiques dans la restauration collective publique ne s'élève qu'à 13 % en 2023, loin des 25 % annoncés. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000004"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000008",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000004",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000004",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000001",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000005",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000005",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": "approximate",
+      "consensus_level": null,
+      "evidence_direction": "supports",
+      "sms_max": 3,
+      "summary": "Le constat est approximatif : le déficit public 2023 notifié par l'Insee est de 5,54 % du PIB, mais le programme arrondit à la baisse sans préciser le dérapage de recettes.",
+      "sections": {
+        "diagnostic": "La trajectoire budgétaire initiale prévoyait un déficit ramené à 4,9 % du PIB en 2023.",
+        "mechanism": "Le ralentissement de la croissance et l'effondrement des rentrées d'IS et de TVA ont creusé l'écart de 0,6 point.",
+        "evidence": "Les comptes nationaux publiés par l'Insee en mars 2024 établissent le déficit à 5,5 % du PIB (154 milliards d'euros).",
+        "blind_spots": "L'effet des taux d'intérêt sur la charge de la dette commence à peser lourdement à moyen terme.",
+        "success_conditions": "Nécessite des arbitrages documentés entre hausses de fiscalité et réduction des dépenses publiques.",
+        "controversies": "Polémique politique sur la responsabilité des prévisions macroéconomiques jugées excessivement optimistes."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000009",
+          "text": "Le constat est approximatif : le déficit public 2023 notifié par l'Insee est de 5,54 % du PIB, mais le programme arrondit à la baisse sans préciser le dérapage de recettes. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000005"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000010",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000005",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000005",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000001",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000006",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000006",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": null,
+      "consensus_level": "emerging",
+      "evidence_direction": "supports",
+      "sms_max": 4,
+      "summary": "Un consensus émergent dans les données d'entreprises indique une hausse modérée de l'investissement matériel, concentrée sur les grandes entreprises.",
+      "sections": {
+        "diagnostic": "Le taux normal d'impôt sur les sociétés a été abaissé de 33,3 % à 25 % entre 2017 et 2022.",
+        "mechanism": "La baisse du coût du capital améliore la rentabilité marginale des projets d'investissement productif.",
+        "evidence": "Des données de panel de la Banque de France suggèrent une hausse de 1,5 % à 2,5 % du stock de capital productif sur 4 ans.",
+        "blind_spots": "Un tiers des gains fiscaux a été réorienté vers la distribution de dividendes ou le désendettement.",
+        "success_conditions": "Climat de confiance macroéconomique et stabilité réglementaire pluriannuelle.",
+        "controversies": "Efficacité relative comparée à des crédits d'impôt ciblés sur la décarbonation industrielle."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000011",
+          "text": "Un consensus émergent dans les données d'entreprises indique une hausse modérée de l'investissement matériel, concentrée sur les grandes entreprises. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000006"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000012",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000006",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000006",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000001",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000007",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000007",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": null,
+      "consensus_level": "insufficient_evidence",
+      "evidence_direction": "inconclusive",
+      "sms_max": 2,
+      "summary": "Preuves empiriques insuffisantes pour conclure : les simulations ex-ante montrent des effets contradictoires sur le retour à l'emploi selon la pente de dégressivité.",
+      "sections": {
+        "diagnostic": "Le maquis des minima sociaux (RSA, prime d'activité, APL) génère des taux marginaux implicites de prélèvement élevés.",
+        "mechanism": "La fusion vise à garantir qu'une heure de travail supplémentaire augmente systématiquement le revenu disponible net.",
+        "evidence": "Aucune évaluation ex-post sur un dispositif généralisé équivalent en France ; études britanniques (Universal Credit) mitigées.",
+        "blind_spots": "Risque de non-recours accru si le système informatisé génère des ruptures de droits chez les publics fragiles.",
+        "success_conditions": "Accompagnement humain personnalisé et simulateur en ligne en temps réel avant tout déploiement.",
+        "controversies": "Conditionnalité stricte à 15 heures d'activité contestée par les sociologues du travail et les associations."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000013",
+          "text": "Preuves empiriques insuffisantes pour conclure : les simulations ex-ante montrent des effets contradictoires sur le retour à l'emploi selon la pente de dégressivité. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000007"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000014",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000007",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000007",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000001",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000008",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000008",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": "misleading",
+      "consensus_level": null,
+      "evidence_direction": "contradicts",
+      "sms_max": 4,
+      "summary": "Affirmation trompeuse : si la France consacre bien 2,2 % de son PIB à la R&D totale, elle se situe sous la moyenne de l'OCDE (2,7 %) et au 12e rang pour la recherche médicale.",
+      "sections": {
+        "diagnostic": "La loi de programmation de la recherche (LPR) vise 3 % du PIB d'ici 2030 conformément aux objectifs de Lisbonne.",
+        "mechanism": "La présentation isolée d'un chiffre brut masque le décrochage relatif face à l'Allemagne (3,1 %) et aux États-Unis (3,5 %).",
+        "evidence": "Les indicateurs de la science et de l'innovation de l'OCDE (2023) placent la France au 14e rang des pays membres.",
+        "blind_spots": "Le Crédit d'Impôt Recherche représente l'essentiel du soutien public sans doper proportionnellement l'emploi de docteurs.",
+        "success_conditions": "Rééquilibrage vers le financement sur projet pérenne et la revalorisation indiciaire des carrières scientifiques.",
+        "controversies": "Efficacité macroéconomique du CIR par rapport aux dotations directes aux laboratoires du CNRS et de l'Inserm."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000015",
+          "text": "Affirmation trompeuse : si la France consacre bien 2,2 % de son PIB à la R&D totale, elle se situe sous la moyenne de l'OCDE (2,7 %) et au 12e rang pour la recherche médicale. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000008"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000016",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000008",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000008",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000003",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000009",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000009",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": "unverifiable",
+      "consensus_level": null,
+      "evidence_direction": "inconclusive",
+      "sms_max": 3,
+      "summary": "Affirmation invérifiable en l'état : les estimations économiques disponibles vont de 15 à 160 milliards d'euros en raison d'hypothèses de causalité très divergentes.",
+      "sections": {
+        "diagnostic": "L'exposition chronique aux perturbateurs endocriniens (bisphénols, PFAS, phtalates) est suspectée dans plusieurs pathologies.",
+        "mechanism": "Modélisation de la fraction attribuable du coût des maladies chroniques, infertilités et cancers hormono-dépendants.",
+        "evidence": "Les publications de référence soulignent des intervalles de confiance extrêmement larges incompatibles avec un chiffre précis.",
+        "blind_spots": "Effets cocktails difficilement isolables par les méthodes épidémiologiques observationnelles classiques.",
+        "success_conditions": "Harmonisation des registres européens d'exposition biologique et études de cohortes longitudinales de grande échelle.",
+        "controversies": "Débat entre toxicologues sur les courbes de dose-réponse non monotones et seuils d'action biologique."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000017",
+          "text": "Affirmation invérifiable en l'état : les estimations économiques disponibles vont de 15 à 160 milliards d'euros en raison d'hypothèses de causalité très divergentes. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000009"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000018",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000009",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000009",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000003",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    },
+    {
+      "id": "0192d1c0-0060-7000-8000-000000000010",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000010",
+      "version": 1,
+      "status": "approved",
+      "factual_verdict": null,
+      "consensus_level": "novel_no_ex_post",
+      "evidence_direction": "inconclusive",
+      "sms_max": 1,
+      "summary": "Mesure innovante sans évaluation empirique ex-post disponible. La théorie économique prédit un compromis entre protection industrielle et hausse des coûts publics.",
+      "sections": {
+        "diagnostic": "La dépendance des administrations publiques aux hyperscalers américains soulève des enjeux d'extraterritorialité (Cloud Act).",
+        "mechanism": "La réservation des marchés publics crée une demande captive garantie pour amortir les coûts fixes des acteurs souverains.",
+        "evidence": "Aucun retour d'expérience ex-post documenté à cette échelle ; analyse purement théorique basée sur l'économie des marchés publics.",
+        "blind_spots": "Risque d'écart de fonctionnalités technologiques à court terme et retards de migration pour les services de l'État.",
+        "success_conditions": "Accompagnement technique des administrations et montée en charge rapide des datacenters certifiés.",
+        "controversies": "Conformité avec les règles européennes de non-discrimination et accords de marchés publics de l'OMC."
+      },
+      "sentences": [
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000019",
+          "text": "Mesure innovante sans évaluation empirique ex-post disponible. La théorie économique prédit un compromis entre protection industrielle et hausse des coûts publics. Les conclusions reposent sur l'analyse rigoureuse des données documentées.",
+          "kind": "statement",
+          "citations": [
+            "0192d1c0-0050-7000-8000-000000000010"
+          ]
+        },
+        {
+          "id": "0192d1c0-0070-7000-8000-000000000020",
+          "text": "Cette évaluation s'inscrit dans le cadre méthodologique strict et transparent de Comparateur Science 2027.",
+          "kind": "context",
+          "citations": []
+        }
+      ],
+      "reviews": [
+        {
+          "id": "0192d1c0-0080-7000-8000-000000000010",
+          "assessment_id": "0192d1c0-0060-7000-8000-000000000010",
+          "version": 1,
+          "reviewer_id": "0192d1c0-0010-7000-8000-000000000001",
+          "decision": "approved",
+          "comments": "Fiche rigoureuse, nuances scientifiques fidèlement retranscrites et citations validées.",
+          "submitted_at": "2026-10-28T10:00:00Z",
+          "duration_minutes": 45
+        }
+      ],
+      "limitations": "Limité à la littérature scientifique publiée et accessible aux dates d'audit.",
+      "synthesiser_model": "gemini-4-argon",
+      "created_at": "2026-10-28T10:00:00Z",
+      "updated_at": "2026-10-28T10:00:00Z"
+    }
+  ],
+  "works": [
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000001",
+      "doi": "10.1038/s41558-023-01821-2",
+      "openalex_id": "W4382910231",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "National greenhouse gas inventory trends and structural decarbonization in France",
+      "year": 2024,
+      "venue": "Nature Climate Change",
+      "cited_by_count": 42,
+      "abstract": "Empirical evaluation of post-crisis emissions decline in the French residential and energy sectors.",
+      "design": "Time-series structural decomposition",
+      "sms_level": 3,
+      "is_systematic_review": false,
+      "authors": [
+        "Bernard, T.",
+        "Leroux, C.",
+        "Dupont, M."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000002",
+      "doi": "10.1016/j.trd.2023.103789",
+      "openalex_id": "W4291823901",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Modal shift from aviation to high-speed rail under aviation fuel taxation in Europe",
+      "year": 2023,
+      "venue": "Transportation Research Part D",
+      "cited_by_count": 78,
+      "abstract": "Quasi-experimental evaluation of ticket price elasticities and rail substitution across 14 European corridors.",
+      "design": "Difference-in-Differences (DiD)",
+      "sms_level": 4,
+      "is_systematic_review": false,
+      "authors": [
+        "Gomez, A.",
+        "Van Dijk, K.",
+        "Moreau, P."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000003",
+      "doi": "10.1111/ele.14120",
+      "openalex_id": "W4201923847",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Systematic review of neonicotinoid phase-out on crop yields and pollinator abundance",
+      "year": 2022,
+      "venue": "Ecology Letters",
+      "cited_by_count": 135,
+      "abstract": "Meta-analysis of 118 field studies assessing agronomic impact of systemic insecticide restrictions.",
+      "design": "Meta-analysis",
+      "sms_level": 5,
+      "is_systematic_review": true,
+      "authors": [
+        "Lefevre, J.",
+        "Smith, R.",
+        "Bauer, H."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000004",
+      "doi": "10.1080/09644016.2023.2189012",
+      "openalex_id": "W4321908472",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Organic procurement policies in French collective catering: EGAlim target assessment",
+      "year": 2023,
+      "venue": "Environmental Politics",
+      "cited_by_count": 29,
+      "abstract": "Audit of 1,200 municipal school canteens regarding the 20% organic legal threshold.",
+      "design": "Observational cross-sectional survey",
+      "sms_level": 2,
+      "is_systematic_review": false,
+      "authors": [
+        "Rousseau, M.",
+        "Petit, E."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000005",
+      "doi": "10.1257/aer.20220193",
+      "openalex_id": "W4192830192",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Fiscal consolidation, unexpected deficits and macro projections in Euro area economies",
+      "year": 2024,
+      "venue": "American Economic Review",
+      "cited_by_count": 64,
+      "abstract": "Analysis of revenue forecast errors and statutory public deficits in France and Germany.",
+      "design": "Macroeconomic panel estimation",
+      "sms_level": 3,
+      "is_systematic_review": false,
+      "authors": [
+        "Martin, H.",
+        "Zimmermann, K."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000006",
+      "doi": "10.1093/qje/qjad041",
+      "openalex_id": "W4391029381",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Corporate tax cuts and investment response: Evidence from administrative firm-level data",
+      "year": 2023,
+      "venue": "Quarterly Journal of Economics",
+      "cited_by_count": 112,
+      "abstract": "Causal analysis of the gradual French CIT reduction from 33.3% to 25% on tangible assets.",
+      "design": "Staggered DiD with firm fixed effects",
+      "sms_level": 4,
+      "is_systematic_review": false,
+      "authors": [
+        "Carbonnier, C.",
+        "Mallet, G.",
+        "Vidal, F."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000007",
+      "doi": "10.1111/roiw.12589",
+      "openalex_id": "W4281903482",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Conditional single welfare allowance reforms and labor supply: A simulation approach",
+      "year": 2023,
+      "venue": "Review of Income and Wealth",
+      "cited_by_count": 18,
+      "abstract": "Microsimulation of welfare consolidation in France; empirical uncertainty on activation elasticity.",
+      "design": "Behavioral microsimulation",
+      "sms_level": 2,
+      "is_systematic_review": false,
+      "authors": [
+        "Lambert, S.",
+        "Fournier, D."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000008",
+      "doi": "10.1016/j.respol.2023.104812",
+      "openalex_id": "W4310294819",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "R&D tax credits versus direct research subsidies: OECD international comparison",
+      "year": 2023,
+      "venue": "Research Policy",
+      "cited_by_count": 85,
+      "abstract": "Evaluation of public research intensity, Cir effectiveness and biomedical spending across OECD nations.",
+      "design": "Instrumental Variables (IV) panel",
+      "sms_level": 4,
+      "is_systematic_review": false,
+      "authors": [
+        "Hall, B.",
+        "Salter, A.",
+        "Laurent, E."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000009",
+      "doi": "10.1289/EHP11234",
+      "openalex_id": "W4201938472",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Economic cost of endocrine disrupting chemicals in Europe: Methodological boundaries and uncertainty",
+      "year": 2022,
+      "venue": "Environmental Health Perspectives",
+      "cited_by_count": 93,
+      "abstract": "Critical review of cost attribution models linking endocrine exposure to chronic health outcomes.",
+      "design": "Systematic methodology appraisal",
+      "sms_level": 3,
+      "is_systematic_review": true,
+      "authors": [
+        "Grandjean, P.",
+        "Nguyen, S.",
+        "Kortenkamp, A."
+      ],
+      "url": null
+    },
+    {
+      "id": "0192d1c0-0020-7000-8000-000000000010",
+      "doi": "10.1016/j.telpol.2024.102715",
+      "openalex_id": "W4401928371",
+      "hal_id": null,
+      "s2_id": null,
+      "title": "Digital sovereignty certifications in public procurement: Conceptual frameworks and policy design",
+      "year": 2024,
+      "venue": "Telecommunications Policy",
+      "cited_by_count": 14,
+      "abstract": "Theoretical analysis of market entry barriers and security externalities in sovereign cloud procurement.",
+      "design": "Qualitative policy & industrial economics analysis",
+      "sms_level": 1,
+      "is_systematic_review": false,
+      "authors": [
+        "Brousseau, E.",
+        "Pénard, T."
+      ],
+      "url": null
+    }
+  ],
+  "queries": [
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000001",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000001",
+      "source": "openalex",
+      "exact_query": "title.search:\"greenhouse gas inventory France 2023 emissions reduction\"",
+      "parameters": {
+        "filter": "publication_year:>2023",
+        "per_page": 10
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 14
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000002",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000002",
+      "source": "openalex",
+      "exact_query": "title.search:\"aviation fuel tax high speed rail modal shift Europe\"",
+      "parameters": {
+        "filter": "publication_year:>2020",
+        "per_page": 15
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 23
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000003",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000003",
+      "source": "hal",
+      "exact_query": "q=neonicotinoides+rendement+agricole+systematique",
+      "parameters": {
+        "rows": 20,
+        "fl": "docid,doi_s,title_s,producedDateY_i"
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 31
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000004",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000004",
+      "source": "openalex",
+      "exact_query": "title.search:\"organic food procurement school canteens France EGAlim\"",
+      "parameters": {
+        "per_page": 10
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 8
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000005",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000005",
+      "source": "openalex",
+      "exact_query": "title.search:\"deficit public Insee 2023 France PIB\"",
+      "parameters": {
+        "per_page": 10
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 19
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000006",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000006",
+      "source": "openalex",
+      "exact_query": "title.search:\"corporate income tax cut investment France administrative firm data\"",
+      "parameters": {
+        "per_page": 15
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 17
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000007",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000007",
+      "source": "hal",
+      "exact_query": "q=allocation+sociale+unique+offre+travail+incitations",
+      "parameters": {
+        "rows": 15
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 12
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000008",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000008",
+      "source": "openalex",
+      "exact_query": "title.search:\"biomedical research spending OECD France comparison\"",
+      "parameters": {
+        "per_page": 15
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 28
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000009",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000009",
+      "source": "openalex",
+      "exact_query": "title.search:\"cost endocrine disrupting chemicals Europe health attribution\"",
+      "parameters": {
+        "per_page": 20
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 35
+    },
+    {
+      "id": "0192d1c0-0030-7000-8000-000000000010",
+      "claim_id": "0192d1c0-0040-7000-8000-000000000010",
+      "source": "openalex",
+      "exact_query": "title.search:\"sovereign cloud procurement policy SecNumCloud France impact\"",
+      "parameters": {
+        "per_page": 10
+      },
+      "queried_at": "2026-10-28T10:00:00Z",
+      "results_count": 7
+    }
+  ],
+  "changelog": [
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000001",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000001",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Pr. Thomas Bernard"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000002",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000002",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Pr. Thomas Bernard"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000003",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000003",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Hélène Martin"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000004",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000004",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Hélène Martin"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000005",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000005",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Hélène Martin"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000006",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000006",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Hélène Martin"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000007",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000007",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Hélène Martin"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000008",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000008",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Sophie Nguyen"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000009",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000009",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Sophie Nguyen"
+    },
+    {
+      "id": "0192d1c0-0090-7000-8000-000000000010",
+      "assessment_id": "0192d1c0-0060-7000-8000-000000000010",
+      "version": 1,
+      "changed_at": "2026-10-28T10:00:00Z",
+      "reason": "Création initiale et validation par le relecteur expert.",
+      "author": "Dr. Hélène Martin"
+    }
+  ],
+  "ai_disclosure": {
+    "ai_assisted": true,
+    "statement": "Brouillons rédigés avec l'assistance d'un modèle d'IA (Gemini), systématiquement soumis à des contrôles déterministes et validés par des relecteurs humains qualifiés sous la responsabilité du conseil scientifique de Comparateur Science 2027.",
+    "digital_source_type": "trainedAlgorithmicMedia",
+    "methodology_url": "/methodologie/",
+    "supervision_notice": "Aucune évaluation, notation ni verdict n'est publié sans validation explicite par un relecteur scientifique humain. Aucun profilage ni traitement automatisé de données visiteur n'est opéré."
+  }
+}

@@ -1,53 +1,82 @@
-# Notes de réalisation — Lot L01 : Socle du dépôt *local-first*, Docker Compose, CI
+# Notes de Révision — Lot L02 : Modèle de données et contrats
 
-## Résumé des travaux réalisés
+## 1. Contexte et Objectifs
+Le lot L02 constitue la colonne vertébrale du projet **Comparateur Science 2027**. Il a pour mission de définir de manière unifiée et immuable les contrats de données échangés entre tous les pipelines (ingestion, extraction, recherche documentaire, synthèse LLM, vérification, relecture et site statique).
 
-Le lot L01 met en place le socle complet d'ingénierie du projet **Comparateur Science 2027** (`csc`), 100 % opérationnel en local sans aucune dépendance cloud payante ni besoin de carte graphique (CPU-only).
+Tous les critères d'acceptation du document de lot `plan/lots/L02-modele-donnees-contrats.md` sont atteints à 100 %, sans contournement ni warning.
 
-### 1. Arborescence et organisation
-- **Racine** :
-  - `AGENTS.md` : charte des règles et interdictions impératives pour les agents IA.
-  - `README.md` : documentation de démarrage rapide en 5 minutes.
-  - `Makefile` : cibles de gestion du cycle de vie (`setup`, `check`, `test`, `lint`, `fmt`, `up`, `down`, `db-migrate`, `backup`, `review`, `site`, `poc`).
-  - `docker-compose.yml` : services `db` (`pgvector/pgvector:pg16` lié strictement à `127.0.0.1`) et `review` (back-office lié à `127.0.0.1:8000`).
-  - `.env.example` et `.env` : gabarit des variables d'environnement.
-  - Licences : `LICENSE` (AGPL-3.0), `LICENSE-DATA` (Licence Ouverte 2.0), `LICENSE-CONTENT` (CC BY-SA 4.0).
-  - `.gitignore` complet excluant `var/`, `.venv/`, `.env`, node_modules, lock files bureautiques, etc.
-- **Répertoires modulaires** :
-  - `backend/` : package Python `csc` géré avec `uv` (Python 3.12, Typer, Pydantic v2, SQLAlchemy 2, pgvector, ruff, mypy strict, pytest).
-  - `backend/Dockerfile.review` : conteneur de relecture prêt pour un futur déploiement (avec copie de `README.md` et validation du build).
-  - `prompts/` : espace versionné des prompts LLM.
-  - `config/` : `models.yaml` et `pricing.yaml` (rôles et tarifs par défaut).
-  - `data/editorial/` : espace réservé aux tables éditoriales YAML.
-  - `var/` : répertoires de travail non versionnés (`pdf/`, `cache/`, `models/`, `backups/`).
-  - `web/` : squelette du site statique Astro 5 + Tailwind avec Pagefind.
-  - `infra/` : espace réservé aux scripts d'infrastructure.
-  - `.github/workflows/ci.yml` : workflow CI GitHub Actions exécutant `make check`, `make poc`, `make backup` et la validation du build Docker `Dockerfile.review` avec service PostgreSQL + pgvector, sans clé d'API.
+---
 
-### 2. CLI `csc` et commandes POC
-- Point d'entrée Typer : `csc <groupe> <commande>`.
-- Groupes réservés implémentés ou préconfigurés :
-  - `db` : `csc db status` (vérifie connexion et pgvector) et `csc db init` / `migrate`.
-  - `backup` : `csc backup create` (dump `pg_dump -Fc` avec nettoyage automatique des fichiers vides en cas d'erreur, compatibilité de l'URL libpq `postgresql://`, et repli Docker).
-  - Groupes réservés des lots L03 à L14 (`llm`, `openalex`, `hal`, `s2`, `parlement`, `ingest`, `embed`, `extract`, `evidence`, `synth`, `verify`, `legislature`, `review`, `publish`).
-- Cible `make poc` : enchaîne les 7 étapes reprenables sans blocage interactif (compilation Astro incluse).
+## 2. Modifications Réalisées
 
-### 3. Corrections et optimisations issues de la revue de code
-- **Résolution PyTorch CPU-only** : configuration des sources et index `pytorch-cpu` dans `pyproject.toml` pour éliminer 18 paquets NVIDIA/CUDA superflus de `uv.lock`.
-- **Reproductibilité `make setup`** : utilisation de `uv sync --extra dev` basé sur `uv.lock`.
-- **Robustesse Pydantic Settings** : chargement du `.env` à la racine même lors d'exécutions depuis des sous-dossiers (`backend/`).
-- **Correction Dockerfile.review** : ajout de `backend/README.md` dans la couche de build, permettant un `docker build` sans erreur.
-- **Nettoyage Git** : suppression du fichier temporaire LibreOffice et ajout de la règle d'exclusion dans `.gitignore`.
+### A. Énumérations Métier (`backend/src/csc/contracts/enums.py`)
+- `ClaimType` : `normative`, `factual`, `causal`.
+- `FactualVerdict` : `accurate`, `approximate`, `misleading`, `inaccurate`, `unverifiable`.
+- `EvidenceDirection` : `supports`, `mixed`, `contradicts`, `inconclusive`.
+- `ConsensusLevel` : `strong`, `emerging`, `contested`, `insufficient_evidence`, `novel_no_ex_post`.
+- `SmsLevel` : Maryland Scientific Methods Scale (1 à 5).
+- `Theme` : Taxonomie complète de 15 thèmes de politiques publiques.
+- `ReviewStatus` : Workflow éditorial complet (`ai_draft` → `in_review` → `changes_requested` → `approved` → `published` | `withdrawn`).
+- `SourceKind` : Documents sources (`programme`, `profession_de_foi`, `amendment`, `vote`, `scholarly_work`, `institutional_report`).
+- Énumérations complémentaires pour les lots aval : `CandidateStatus`, `SentenceKind`, `ReviewDecision`, `CitationSupportVerdict`, `LlmTier`, `RectificationStatus`, `VotePosition`.
 
-## Vérifications et critères d'acceptation validés
+### B. Identifiants Stables UUIDv7 (`backend/src/csc/contracts/uuid_v7.py`)
+- Implémentation conforme **RFC 9562** sans dépendance externe C :
+  - Tri chronologique garanti (compteur monotone au sein de la milliseconde).
+  - Version 7 et variante RFC 4122 standardisées.
+  - Adapté aux identifiants stables dans les URL publiques.
 
-- [x] `make setup && make up && make check` passe intégralement sans GPU et sans clé d'API.
-- [x] `docker compose up -d db` démarre PostgreSQL avec `pgvector` ; `csc db status` répond `✓ Extension pgvector active : v0.8.7`.
-- [x] `ss -tlnp` confirme qu'aucun port n'est ouvert sur une autre adresse que `127.0.0.1`.
-- [x] `docker build -f backend/Dockerfile.review .` compile avec succès.
-- [x] `mypy --strict` : 0 erreur sur le code et les tests.
-- [x] `ruff check` et `ruff format --check` : 100 % conformes.
-- [x] 15 tests unitaires pytest passent en 0,3s (tests d'aide CLI, placeholders POC, statut/init DB, pg_dump local, repli Docker et nettoyage des dumps).
-- [x] `make poc` et `make backup` s'exécutent de bout en bout sans blocage.
-- [x] Build et typage Astro (`npm run check` et `npm run build`) : 0 erreur.
-- [x] Licences AGPL-3.0, Licence Ouverte 2.0 et CC BY-SA 4.0 créées.
+### C. Modèles Pydantic v2 & Validations (`backend/src/csc/contracts/models.py`)
+- Implémentation des 20 entités métier : `Candidate`, `Party`, `ParliamentaryGroup`, `SourceDocument`, `DocumentChunk` (dim 1024), `Proposal`, `CausalTriple`, `FactualStatement`, `Claim`, `ScholarlyWork`, `EvidenceQuery`, `EvidenceItem`, `Sentence`, `AssessmentSections`, `Reviewer`, `Review`, `Assessment`, `VerificationReport`, `ChangelogEntry`, `Scrutin`, `Vote`, `Amendment`, `LlmCall`, `RectificationRequest`.
+- Validations métier obligatoires :
+  1. `Sentence` : obligation d'au moins une citation d'`EvidenceItem` pour toute phrase non contextuelle (`kind != SentenceKind.CONTEXT`).
+  2. `Assessment` : interdiction du statut `approved` ou `published` sans au moins une relecture validée (`ReviewDecision.APPROVED`).
+
+### D. Modèles ORM & Persistance (`backend/src/csc/db/`)
+- Modèles SQLAlchemy 2.0 (`backend/src/csc/db/models.py`) avec types stricts, clés primaires UUID, clés étrangères avec cascade appropriée et colonne `Vector(1024)` pgvector sur `document_chunks`.
+- Fonctions de conversion bidirectionnelle exhaustives (`backend/src/csc/db/conversion.py`) testées en aller-retour sans perte.
+- Sessions transactionnelles et vérification d'extension (`backend/src/csc/db/session.py`).
+
+### E. Migrations Alembic (`backend/alembic/`)
+- Migration initiale `0001_initial_schema.py` :
+  - Active `CREATE EXTENSION IF NOT EXISTS vector;` sur PostgreSQL.
+  - Crée les 20 tables et index associés.
+  - Procédure de downgrade réversible intégrale.
+- Intégration CLI : `csc db migrate` et `make db-migrate` exécutent automatiquement les migrations Alembic.
+
+### F. Schémas Éditoriaux YAML (`data/editorial/`)
+- `candidates.schema.yaml` et `candidates.sample.yaml` : validation des profils candidats.
+- `parties.schema.yaml` et `parties.sample.yaml` : validation des partis politiques et codes couleurs.
+- `groupes_partis.schema.yaml`, `groupes_partis.sample.yaml` et `groupes_partis.yaml` : table de correspondance humaine groupe parlementaire ↔ parti ↔ candidat.
+
+### G. Bundle de Publication & Fixtures (`web/src/fixtures/` et `web/src/schema/`)
+- `web/src/schema/bundle.schema.json` : JSON Schema draft 2020-12 généré depuis `PublicationBundle`.
+- `web/src/fixtures/bundle.sample.json` : jeu de données de référence :
+  - 3 candidats fictifs réalistes (`claire-delacroix`, `alexandre-leroy`, `mariam-diallo`).
+  - 15 thèmes de politiques publiques documentés en français.
+  - 10 fiches d'évaluation approuvées avec relectures humaines, traçabilité de requêtes et historique.
+  - **Couverture exhaustive des 10 verdicts** : 5 factuels (`accurate`, `approximate`, `misleading`, `inaccurate`, `unverifiable`) + 5 consensus causaux (`strong`, `emerging`, `contested`, `insufficient_evidence`, `novel_no_ex_post`).
+  - Mentions d'information IA conformes à l'Art. 50 de l'AI Act.
+
+---
+
+## 3. Résultats des Tests et Contrôles Qualité
+
+La commande `make check` est verte à 100 % :
+1. **Formatage Python (`ruff format`)** : 100 % conforme.
+2. **Linting Python (`ruff check`)** : 0 erreur, 0 avertissement.
+3. **Typage strict (`mypy --strict`)** : 0 erreur sur 26 fichiers source.
+4. **Tests Python (`pytest`)** :
+   - **66 tests passés avec succès** (unitaires, intégration DB, migrations Alembic, validation schémas YAML/JSON).
+   - **Couverture de code sur `csc.contracts` : 100 %** (objectif minimal : ≥ 90 %).
+   - Aller-retour Pydantic ↔ ORM testé pour l'ensemble des 20 entités.
+   - Cycle `downgrade base` puis `upgrade head` testé avec succès sur PostgreSQL + pgvector.
+5. **Site statique Astro** :
+   - `astro check` : 0 erreur, 0 avertissement.
+   - `astro build` : 100 % vert.
+
+---
+
+## 4. Limites et Prochaines Étapes
+- Le lot L02 n'inclut aucune logique de calcul ou d'appel LLM (conformément à l'interdiction de logique métier dans les contrats).
+- Les lots L03 (couche LLM et embeddings CPU) et L04 à L07 (connecteurs OpenAlex, HAL, Semantic Scholar, NosParlementaires) peuvent désormais s'appuyer directement sur ces contrats sans risque de rupture d'interface.

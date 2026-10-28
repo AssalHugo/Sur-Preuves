@@ -3,11 +3,15 @@
 import shutil
 import subprocess
 from datetime import datetime
+from pathlib import Path
 
 import typer
+from alembic.config import Config as AlembicConfig
 from rich.console import Console
 
+from alembic import command as alembic_command
 from csc.config import settings
+from csc.contracts.publish import export_bundle_schema
 from csc.db import check_db_status, init_vector_extension
 
 app = typer.Typer(
@@ -60,8 +64,25 @@ def db_init_cmd() -> None:
 
 @db_app.command(name="migrate")
 def db_migrate_cmd() -> None:
-    """Applique les migrations de base de données."""
+    """Applique les migrations de base de données (Alembic) et vérifie pgvector."""
     db_init_cmd()
+    console.print("[bold blue]Exécution des migrations Alembic...[/bold blue]")
+    try:
+        ini_candidates = [
+            Path("backend/alembic.ini"),
+            Path("alembic.ini"),
+            Path(__file__).resolve().parent.parent.parent / "alembic.ini",
+        ]
+        ini_file = next((p for p in ini_candidates if p.exists()), None)
+        if not ini_file:
+            raise FileNotFoundError("Fichier alembic.ini introuvable")
+
+        alembic_cfg = AlembicConfig(str(ini_file))
+        alembic_command.upgrade(alembic_cfg, "head")
+        console.print("[bold green]✓ Migrations Alembic appliquées avec succès.[/bold green]")
+    except Exception as exc:
+        console.print(f"[bold red]✗ Erreur lors des migrations : {exc}[/bold red]")
+        raise typer.Exit(code=1) from exc
 
 
 # ------------------------------------------------------------------------------
@@ -169,6 +190,23 @@ def publish_bundle(
         f"[yellow][POC] publish bundle : étape non implémentée (Lot L14) "
         f"[include_drafts={include_drafts}, poc={poc}][/yellow]"
     )
+
+
+DEFAULT_SCHEMA_OUTPUT = "web/src/schema/bundle.schema.json"
+
+
+@publish_app.command(name="schema")
+def publish_schema_cmd(
+    output: str = typer.Option(
+        DEFAULT_SCHEMA_OUTPUT,
+        "--output",
+        "-o",
+        help="Chemin de sortie du JSON Schema",
+    ),
+) -> None:
+    """Exporte le schéma JSON Schema du PublicationBundle."""
+    export_bundle_schema(Path(output))
+    console.print(f"[bold green]✓ Schéma JSON exporté avec succès vers : {output}[/bold green]")
 
 
 app.add_typer(publish_app, name="publish")

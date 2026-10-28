@@ -74,7 +74,7 @@ down:
 
 db-migrate:
 	@echo "==> Initialisation de l'extension pgvector et migrations..."
-	@$(CSC) db init
+	@$(CSC) db migrate
 
 backup:
 	@echo "==> Sauvegarde locale de la base de données..."

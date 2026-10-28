@@ -1,0 +1,55 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: "Schéma de correspondance groupes parlementaires, partis et candidats"
+description: "Table éditoriale validée humainement pour la liaison votes/amendements ↔ candidats"
+type: object
+required:
+  - groups
+properties:
+  version:
+    type: string
+    description: "Version de la table de correspondance"
+  groups:
+    type: array
+    description: "Groupes parlementaires et correspondances"
+    items:
+      type: object
+      required:
+        - id
+        - name
+        - short_name
+        - chamber
+        - associated_parties
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: "Identifiant officiel du groupe (ex: EPR, RN, LFI-NFP, SOC)"
+        name:
+          type: string
+          minLength: 1
+          description: "Nom officiel complet du groupe"
+        short_name:
+          type: string
+          minLength: 1
+          description: "Sigle usuel du groupe"
+        chamber:
+          type: string
+          enum:
+            - assemblee
+            - senat
+          description: "Chambre parlementaire"
+        associated_parties:
+          type: array
+          items:
+            type: string
+          description: "Partis composant ce groupe"
+        associated_candidates:
+          type: array
+          items:
+            type: string
+          description: "Slugs des candidats rattachés ou soutenus par ce groupe"
+        description:
+          type: ["string", "null"]
+          description: "Notes contextuelles et nuances sur la discipline de vote"
+      additionalProperties: false
+additionalProperties: false

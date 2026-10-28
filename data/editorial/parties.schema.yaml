@@ -1,0 +1,38 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: "Schéma éditorial des partis politiques"
+description: "Validation du catalogue des partis politiques"
+type: object
+required:
+  - parties
+properties:
+  version:
+    type: string
+    description: "Version du fichier éditorial"
+  parties:
+    type: array
+    description: "Catalogue des partis politiques"
+    items:
+      type: object
+      required:
+        - id
+        - name
+        - short_name
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: "Identifiant canonique ou sigle (ex: REN, RN, EELV, LFI)"
+        name:
+          type: string
+          minLength: 1
+          description: "Nom d'usage complet du parti"
+        short_name:
+          type: string
+          minLength: 1
+          description: "Sigle ou dénomination courte"
+        color_hex:
+          type: ["string", "null"]
+          pattern: "^#[0-9a-fA-F]{6}$"
+          description: "Code couleur hexadécimal indicatif pour l'interface"
+      additionalProperties: false
+additionalProperties: false
