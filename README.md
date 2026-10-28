@@ -129,6 +129,34 @@ Le projet utilise exclusivement l'API Gemini (`google-genai`) avec des règles s
 
 ---
 
+## Connecteur HAL — Archive ouverte nationale (Lot L05)
+
+Le connecteur interroge l'API Solr de HAL (`https://api.archives-ouvertes.fr/search/?wt=json`) sans authentification, avec mise en cache disque (TTL 30 jours dans `var/cache/hal/`) et traçabilité systématique des requêtes (`EvidenceQuery`).
+*Note sur le serveur MCP HAL (`https://api.archives-ouvertes.fr/mcp`) : ce point d'accès est expérimental et non retenu dans le pipeline automatique, mais utilisable manuellement pour l'exploration.*
+
+### Identifiants AuréHAL de structures de recherche utiles (`structId_i`) :
+
+| Acronyme | Identifiant `structId_i` | Organisme de rattachement | Domaine clé |
+|---|---|---|---|
+| **IPP** | `266522` | Institut des Politiques Publiques | Évaluation micro-économique des politiques publiques |
+| **OFCE** | `250936` | Observatoire français des conjonctures économiques (Sciences Po) | Macroéconomie, fiscalité carbone, politiques publiques |
+| **INRAE** | `577435` | Institut National de Recherche pour l’Agriculture, l’Alimentation et l’Environnement | Agriculture, climat, ressources naturelles et biodiversité |
+| **CNRS-SHS** | `84039` | Institut des Sciences Humaines et Sociales (INSHS - CNRS) | Sciences humaines et sociales, droit, sociologie |
+| **LIEPP** | `218465` | Laboratoire interdisciplinaire d'évaluation des politiques publiques (Sciences Po) | Évaluation interdisciplinaire des politiques publiques |
+| **PSE** | `301309` | Paris School of Economics - École d'économie de Paris | Modélisation économique, économie publique et climat |
+| **CEPII** | `110493` | Centre d'études prospectives et d'informations internationales | Économie internationale et commerce |
+| **CNRS** | `441569` | Centre National de la Recherche Scientifique | Recherche fondamentale pluridisciplinaire |
+
+*Cette liste est destinée à être complétée par les relecteurs humains au fil des analyses thématiques.*
+
+### Commandes CLI HAL :
+- `uv run csc hal search "taxe carbone" --proximity "taxe,carbone,3"` : recherche de proximité Solr.
+- `uv run csc hal structure IPP --query "carbone"` : recherche ciblée sur une structure affiliée.
+- `uv run csc hal get halshs-00557065` : affiche la fiche complète d'une publication HAL.
+- `uv run csc hal structures` : affiche la liste des structures référencées.
+
+---
+
 ## Licences
 
 - **Code source** : [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)

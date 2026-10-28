@@ -1,0 +1,19 @@
+{
+  "response":{
+    "numFound":1,
+    "start":0,
+    "maxScore":5.9654202,
+    "numFoundExact":true,
+    "docs":[{
+      "title_s":["De Rio à Rio : un signal-prix mondial du carbone pour sortir de la grande incohérence climatique"],
+      "abstract_s":["Vingt ans après la Conférence de Rio (1992) un constat d’échec s’impose à tous sur le front de la lutte contre les changements climatiques induits par l’activité humaine. Nous ne pourrons pas échapper à un dérèglement grave du climat,en partie déjà amorcé, si nous continuons de la sorte. Il nous faut changer de direction, et vite. Nous préconisons pour ce faire dans cet article un réajustement des négociations climatiques internationales. Nous proposons de réorienter les efforts internationaux vers la négociation d'un signal-prix mondial du carbone, harmonisé dans son principe mais flexible dans son application, plutôt que de s'entêter au cours des prochaines années à demander aux pays d'accepter des cibles nationales plus exigeantes de réduction quantitative en volume de leurs émissions de gaz à effet de serre. Mots-clés: prix du carbone, fiscalité du carbone, marchés du carbone, Protocole de Kyoto, changement climatique (...)."],
+      "authFullName_s":["Eloi Laurent","Stéphane Dion"],
+      "structName_s":["Observatoire français des conjonctures économiques (Sciences Po)","Sciences Po"],
+      "halId_s":"hal-03473891",
+      "uri_s":"https://sciencespo.hal.science/hal-03473891v1",
+      "docType_s":"UNDEFINED",
+      "producedDateY_i":2012,
+      "fileMain_s":"https://sciencespo.hal.science/hal-03473891/document"
+    }]
+  }
+}

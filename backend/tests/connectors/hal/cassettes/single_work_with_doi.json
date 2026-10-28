@@ -1,0 +1,20 @@
+{
+  "response":{
+    "numFound":1,
+    "start":0,
+    "maxScore":5.730707,
+    "numFoundExact":true,
+    "docs":[{
+      "title_s":["Pilotage stratégique de la taxe carbone par les entreprises : les enjeux de la performance globale"],
+      "abstract_s":["Cette recherche s’intéresse à l’opinion des individus, concernant le pilotage stratégique de la taxe carbone par les entreprises, en fonction des facteurs de justice sociale. Pour cela elle applique une technique empruntée aux sciences cognitives. Elle aboutit à deux clusters. Le premier regroupe des individus qui jugent acceptable la combinaison des trois choix de gestion de la taxe carbone suivants : augmentation des prix, investissements « low carbon » et absence de délocalisation, conformément aux justices distributive et rétributive. Les membres du second cluster quant à eux, jugent acceptable tout choix de gestion de la taxe carbone qui autorise le maintien des prix selon la justice réparatrice. Ces résultats sont à considérer dans la définition des stratégies RSE et dans la recherche d’un équilibre des différentes composantes de la performance globale."],
+      "journalTitle_s":"Revue management & avenir",
+      "authFullName_s":["Marco Heimann","Katia Lobre-Lebraty"],
+      "structName_s":["Université Jean Moulin - Lyon 3","Université de Lyon","Laboratoire de Recherche Magellan","Université Jean Moulin - Lyon 3","Université de Lyon","Institut d'Administration des Entreprises (IAE) - Lyon"],
+      "halId_s":"halshs-03386384",
+      "uri_s":"https://shs.hal.science/halshs-03386384v1",
+      "docType_s":"ART",
+      "doiId_s":"10.3917/mav.124.0151",
+      "producedDateY_i":2021
+    }]
+  }
+}

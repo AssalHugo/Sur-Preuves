@@ -1,0 +1,61 @@
+{
+  "response":{
+    "numFound":40,
+    "start":0,
+    "maxScore":4.5587106,
+    "numFoundExact":true,
+    "docs":[{
+      "title_s":["La contribution des émissions importées à l’empreinte carbone de la France"],
+      "abstract_s":["La France s'est dotée en 2015 d'une stratégie nationale bas-carbone qui vise à atteindre la neutralité carbone à l'horizon 2050. Cette neutralité sera effective dès lors que les émissions de GES d'origine anthropique subsistantes sur le territoire national seront intégralement compensées par des puits naturels et/ou artificiels de carbone. Alors que la version révisée de ce document vient d'être officiellement publiée le 24avril 2020, il nous semble important de mettre en exergue un autre point de vue dans la comptabilisation des émissions de GES qui considère non plus les activités de production mais celles associées à une consommation finale comme celles faisant référence dans l'imputation des émissions. Si cette différence peut sembler conceptuelle et sans implication directe dans la démarche de transition écologique d'une société, le degré avancé de fragmentation de la chaîne de valeur globale scindée en plusieurs unités de production, disséminées sur l'ensemble du globe, la rend essentielle à son évaluation. Des objectifs complémentaires à celui de la neutralité carbone inscrits dans la SNBC intègrent déjà des indicateurs relatifs à ces émissions hors du territoire national; cependant Il n'existe pas de système d'information standardisé comme celui officiel des Inventaires Nationaux d'Émissions défini par la Convention-Cadre des Nations Unies sur les Changement Climatiques (United Nations Framework Convention on Climate Change). [Premières lignes]"],
+      "authFullName_s":["Paul Malliet"],
+      "structName_s":["Observatoire français des conjonctures économiques (Sciences Po)","Sciences Po"],
+      "halId_s":"hal-03403047",
+      "uri_s":"https://sciencespo.hal.science/hal-03403047v1",
+      "docType_s":"REPORT",
+      "producedDateY_i":2020,
+      "fileMain_s":"https://sciencespo.hal.science/hal-03403047/document"
+    },{
+      "title_s":["L'empreinte carbone des ménages français et les effets redistributifs d'une fiscalité carbone aux frontières"],
+      "abstract_s":["Dans un contexte où l'humanité doit réduire drastiquement ses émissions de gaz à effet de serre afin de limiter la hausse des températures, la mesure des émissions carbone est devenue un enjeu essentiel du XXIe siècle. L'essor des échanges commerciaux et la globalisation de la chaine de valeur rendent par ailleurs de plus en plus difficile la traçabilité des impacts climatiques et environnementaux des biens et des produits que nous consommons en France. Le concept d'empreinte carbone s'inscrit dans une démarche complémentaire de celle des inventaires nationaux de gaz à effet de serre généralement utilisés dans le cadre des négociations internationales autour des enjeux climatiques, en proposant d'imputer l'ensemble des émissions induites par un processus de production d'un bien ou d'un service à son consommateur final. [Premier paragraphe]"],
+      "journalTitle_s":"OFCE Policy Brief",
+      "authFullName_s":["Paul Malliet"],
+      "structName_s":["Observatoire français des conjonctures économiques (Sciences Po)","Sciences Po"],
+      "halId_s":"hal-03384969",
+      "uri_s":"https://hal.science/hal-03384969v1",
+      "docType_s":"ART",
+      "producedDateY_i":2020,
+      "fileMain_s":"https://hal.science/hal-03384969/document"
+    },{
+      "title_s":["Carbone sans frontières : quelles solutions fiscales face aux émissions importées ?"],
+      "abstract_s":["Même si l’Union européenne est aujourd’hui la seule région du monde dont les émissions de gaz à effet de serre (GES) se réduisent et atteignent les objectifs fixés lors de la signature du Protocole de Kyoto, ses performances sont en partie trompeuses : le prix du carbone sur le marché européen demeure à un niveau trop bas pour réellement inciter à l’innovation en matière énergétique ; les émissions des « secteurs diffus » – en particulier les transports, non couverts par le mécanisme des quotas – progressent rapidement ; et le contenu en carbone des importations est élevé et en constante augmentation, conséquence logique d’une politique qui ne cible que les émissions de production. La mise en œuvre par la France d’une taxe générale sur l’ensemble des émissions de carbone de tous les secteurs est souhaitable et possible. Calquée sur le modèle de la TVA, la TCA (taxe sur le carbone ajouté) ne nuit pas à la compétitivité des producteurs nationaux et permet de frapper les émissions de GES liées aux importations, induisant ainsi une certaine relocalisation des productions. Une telle initiative serait susceptible de relancer la dynamique européenne de lutte contre l’effet de serre et d’en accroître l’efficacité et la valeur d’exemple."],
+      "journalTitle_s":"Revue de l'OFCE",
+      "authFullName_s":["Eloi Laurent","Jacques Le Cacheux"],
+      "structName_s":["Observatoire français des conjonctures économiques (Sciences Po)","Sciences Po","Centre d'Analyse Théorique et de Traitement des données économiques","Université de Pau et des Pays de l'Adour"],
+      "halId_s":"hal-01884862",
+      "uri_s":"https://univ-pau.hal.science/hal-01884862v1",
+      "docType_s":"ART",
+      "doiId_s":"10.3917/reof.122.0083",
+      "producedDateY_i":2012
+    },{
+      "title_s":["Réforme de la fiscalité du carbone dans l’Union européenne"],
+      "abstract_s":["Même si l’Union européenne mène clairement la lutte mondiale contre le changement climatique et en dépit de la réduction des émissions dues à la crise mondiale et la récession européenne, les objectifs ambitieux affichés dans la stratégie « 20-20-20 d’ici 2020 » et le « paquet climat-énergie » sont sans doute hors de portée si une politique plus résolue et cohérente de taxation du carbone n’est pas rapidement mise en place au niveau de l’UE. Dans cet article, nous détaillons et discutons les différentes options en présence pour améliorer l’efficacité de la taxation du carbone dans l’UE.","Even though the EU clearly leads the global fight against climate change and despite the additional reduction in emissions due to the global crisis and European recession, the ambitious objectives flagged in the “20-20-20 by 2020” strategy and ‘climate-energy package ’ may be out of reach if a more resolute and consistent policy of carbon taxation is not rapidly put in place in the EU. In this paper, we detail and discuss the different options available for such European carbon taxation."],
+      "journalTitle_s":"Revue de l'OFCE",
+      "authFullName_s":["Eloi Laurent","Jacques Le Cacheux"],
+      "structName_s":["Observatoire français des conjonctures économiques (Sciences Po)","Sciences Po","Centre d'Analyse Théorique et de Traitement des données économiques","Université de Pau et des Pays de l'Adour","Université de Pau et des Pays de l'Adour"],
+      "halId_s":"hal-03460513",
+      "uri_s":"https://sciencespo.hal.science/hal-03460513v1",
+      "docType_s":"ART",
+      "doiId_s":"10.3917/reof.116.0393",
+      "producedDateY_i":2011,
+      "fileMain_s":"https://sciencespo.hal.science/hal-03460513/document"
+    },{
+      "title_s":["Stratégie de décarbonation de la France"],
+      "authFullName_s":["Adeline Gueret","Paul Malliet"],
+      "structName_s":["Observatoire français des conjonctures économiques (Sciences Po)","Sciences Po"],
+      "halId_s":"hal-03403707",
+      "uri_s":"https://sciencespo.hal.science/hal-03403707v1",
+      "docType_s":"COUV",
+      "producedDateY_i":2019
+    }]
+  }
+}

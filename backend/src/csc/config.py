@@ -46,6 +46,8 @@ class Settings(BaseSettings):
     openalex_cache_dir: Path = Field(default=Path("var/cache/openalex"))
     openalex_daily_budget_credits: float = 100000.0
     openalex_budget_threshold_pct: float = 0.90
+    hal_base_url: str = "https://api.archives-ouvertes.fr/search"
+    hal_cache_dir: Path = Field(default=Path("var/cache/hal"))
     nosparlementaires_api_key: str | None = None
 
     # Sauvegardes
