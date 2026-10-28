@@ -26,27 +26,40 @@ class GoogleProvider:
     ) -> None:
         self.api_key = api_key or settings.gemini_api_key
         self.free_api_key = free_api_key or settings.gemini_free_api_key
+        self._paid_client: genai.Client | None = None
+        self._free_client: genai.Client | None = None
 
     def _get_client(self, tier: str = "paid") -> genai.Client:
-        key = self.free_api_key if tier.lower() == "free" and self.free_api_key else self.api_key
-        if not key:
-            raise LlmError(
-                f"No Gemini API key available for tier '{tier}'. "
-                "Please configure GEMINI_API_KEY or GEMINI_FREE_API_KEY in environment or .env."
-            )
-        return genai.Client(api_key=key)
+        is_free = tier.lower() == "free"
+        if is_free:
+            if self._free_client is not None:
+                return self._free_client
+            key = self.free_api_key or self.api_key
+            if not key:
+                raise LlmError(
+                    "No Gemini API key available for tier 'free'. "
+                    "Please configure GEMINI_FREE_API_KEY or GEMINI_API_KEY in environment or .env."
+                )
+            self._free_client = genai.Client(api_key=key)
+            return self._free_client
+        else:
+            if self._paid_client is not None:
+                return self._paid_client
+            key = self.api_key
+            if not key:
+                raise LlmError(
+                    "No Gemini API key available for tier 'paid'. "
+                    "Please configure GEMINI_API_KEY in environment or .env."
+                )
+            self._paid_client = genai.Client(api_key=key)
+            return self._paid_client
 
-    async def generate(
+    def _build_generate_config(
         self,
-        model: str,
-        prompt: str,
         schema: type[BaseModel] | None = None,
         params: dict[str, Any] | None = None,
-        tier: str = "paid",
-    ) -> ProviderResponse:
-        client = self._get_client(tier=tier)
+    ) -> types.GenerateContentConfig:
         p = params or {}
-
         config_kwargs: dict[str, Any] = {
             "temperature": float(p.get("temperature", 0.0)),
             "max_output_tokens": int(p.get("max_output_tokens", 4096)),
@@ -68,7 +81,18 @@ class GoogleProvider:
                     thinking_budget=thinking_val
                 )
 
-        config = types.GenerateContentConfig(**config_kwargs)
+        return types.GenerateContentConfig(**config_kwargs)
+
+    async def generate(
+        self,
+        model: str,
+        prompt: str,
+        schema: type[BaseModel] | None = None,
+        params: dict[str, Any] | None = None,
+        tier: str = "paid",
+    ) -> ProviderResponse:
+        client = self._get_client(tier=tier)
+        config = self._build_generate_config(schema=schema, params=params)
 
         start_t = time.perf_counter()
         max_retries = 3
@@ -135,17 +159,7 @@ class GoogleProvider:
         tier: str = "paid",
     ) -> str:
         client = self._get_client(tier=tier)
-        p = params or {}
-
-        config_kwargs: dict[str, Any] = {
-            "temperature": float(p.get("temperature", 0.0)),
-            "max_output_tokens": int(p.get("max_output_tokens", 4096)),
-        }
-        if schema is not None:
-            config_kwargs["response_mime_type"] = "application/json"
-            config_kwargs["response_schema"] = schema
-
-        gen_config = types.GenerateContentConfig(**config_kwargs)
+        gen_config = self._build_generate_config(schema=schema, params=params)
 
         inlined_requests: list[types.InlinedRequest] = []
         for item in items:
@@ -165,6 +179,10 @@ class GoogleProvider:
     async def collect_batch(self, job_id: str) -> list[ProviderResponse]:
         client = self._get_client(tier="paid")
         batch_job = await client.aio.batches.get(name=job_id)
+
+        # Check for batch failure
+        if batch_job.state == types.JobState.JOB_STATE_FAILED:
+            raise LlmError(f"Gemini batch job '{job_id}' failed: {batch_job.error}")
 
         # Batch job processing or completion check
         results: list[ProviderResponse] = []

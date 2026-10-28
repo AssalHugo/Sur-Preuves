@@ -79,6 +79,7 @@ class BudgetManager:
     ) -> float:
         """Calculate total spend in USD for the target calendar month."""
         start, end = self._get_month_bounds(target_date)
+        db_spend = 0.0
 
         if session is not None:
             try:
@@ -87,27 +88,25 @@ class BudgetManager:
                     LlmCallModel.created_at <= end,
                 )
                 db_spend = float(session.scalar(stmt) or 0.0)
-                return round(db_spend, 6)
             except Exception as e:
                 logger.debug("Could not read spend from database, using file ledger: %s", e)
 
-        # Fallback to local file ledger
+        # Check local file ledger
         ledger_path = self._resolve_ledger_path()
-        if not ledger_path.exists():
-            return 0.0
+        file_spend = 0.0
+        if ledger_path.exists():
+            try:
+                records = json.loads(ledger_path.read_text(encoding="utf-8"))
+                start_iso = start.isoformat()
+                end_iso = end.isoformat()
+                for r in records:
+                    ts = r.get("created_at", "")
+                    if start_iso <= ts <= end_iso:
+                        file_spend += float(r.get("cost_usd", 0.0))
+            except Exception:
+                pass
 
-        try:
-            records = json.loads(ledger_path.read_text(encoding="utf-8"))
-            total = 0.0
-            start_iso = start.isoformat()
-            end_iso = end.isoformat()
-            for r in records:
-                ts = r.get("created_at", "")
-                if start_iso <= ts <= end_iso:
-                    total += float(r.get("cost_usd", 0.0))
-            return round(total, 6)
-        except Exception:
-            return 0.0
+        return round(max(db_spend, file_spend), 6)
 
     def record_spend(
         self,

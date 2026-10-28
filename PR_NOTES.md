@@ -95,15 +95,16 @@ La cible **`make check` est verte à 100 %** :
 2. **Linting Python (`ruff check`)** : 0 erreur, 0 avertissement.
 3. **Typage statique strict (`mypy --strict`)** : **0 erreur sur 50 fichiers source** (y compris tests et nouveau code).
 4. **Tests Python (`pytest`)** :
-   - **96 tests passés avec succès** en 1,28 s (sans aucun appel réseau réel en test unitaire).
-   - **30 nouveaux tests** couvrant exhaustivement :
+   - **97 tests passés avec succès** en 1,36 s (sans aucun appel réseau réel en test unitaire).
+   - **31 nouveaux tests** couvrant exhaustivement :
      - Les tarifs datés (Argon au 1/12/2026 x2, Flash au 1/1/2027 x2, tokens de cache, tokens de réflexion, gratuité du palier free).
      - La politique de modèles distincts synthèse/vérification et les tables de dérogation.
      - Les garde-fous de confidentialité de l'offre gratuite (Argon, public=True, avis de relecteurs, données personnelles).
      - Le chargement de gabarits Jinja2 et l'interdiction de variables en tête de prompt.
      - Le respect strict du plafond budgétaire avant appel, le découpage automatique de lots et les alertes de réconciliation.
-     - L'orchestrateur `llm.run` avec `FakeProvider` (sortie valide, 1 retry sur erreur, cache hit à coût 0, interdiction du temps réel payant sans debug, batching).
-     - L'embedding CPU de 1 000 passages avec MiniLM, les préfixes e5 obligatoires, la vérification dimensionnelle et la reprise sur incident.
+     - L'orchestrateur `llm.run` avec `FakeProvider` (sortie valide, 1 retry sur erreur, cache hit à coût 0, interdiction du temps réel payant sans debug, batching, collecte via `job.id` ou objet `BatchJob`).
+     - La configuration de réflexion (`thinking`) sur `GoogleProvider` en mode unitaire et batch.
+     - L'embedding CPU de 1 000 passages avec MiniLM, les préfixes e5 obligatoires, la vérification dimensionnelle et la reprise sur incident avec sauvegarde atomique.
    - **2 tests réels Gemini (`@pytest.mark.live`)** isolés de la CI (exécutables manuellement avec `pytest -m live`).
 5. **Site Astro** :
    - `astro check` : 0 erreur, 0 avertissement.

@@ -206,7 +206,10 @@ def llm_cost_cmd(
                 )
                 total_cost += c.cost_usd
     except Exception:
-        # Fallback to file ledger
+        pass
+
+    # Fallback to file ledger if DB returned no records
+    if not calls_data:
         ledger_path = budget_manager._resolve_ledger_path()
         if ledger_path.exists():
             records = json.loads(ledger_path.read_text(encoding="utf-8"))

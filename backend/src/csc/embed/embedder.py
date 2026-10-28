@@ -123,11 +123,13 @@ class CpuEmbedder:
             chunk_vectors = self.passages(chunk)
             results.extend(chunk_vectors)
 
-            # Save checkpoint
+            # Save checkpoint atomically
             if checkpoint_path is not None:
                 try:
                     payload = {"vectors": results, "processed_count": len(results)}
-                    checkpoint_path.write_text(json.dumps(payload), encoding="utf-8")
+                    tmp_ckpt = checkpoint_path.with_suffix(f"{checkpoint_path.suffix}.tmp")
+                    tmp_ckpt.write_text(json.dumps(payload), encoding="utf-8")
+                    tmp_ckpt.replace(checkpoint_path)
                 except Exception as e:
                     logger.warning("Failed to write checkpoint %s: %s", checkpoint_path, e)
 

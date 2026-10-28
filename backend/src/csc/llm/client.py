@@ -36,6 +36,8 @@ class BatchJob(BaseModel):
     id: str
     job_id: str
     prompt_id: str
+    prompt_version: str = "1.0.0"
+    prompt_sha: str = "batch"
     model: str
     role: str
     tier: str
@@ -308,10 +310,13 @@ class LlmClient:
             tier=tier_norm,
         )
 
+        template = prompt_manager.get_template(prompt_id)
         return BatchJob(
-            id=str(uuid.uuid4()),
+            id=raw_job_id,
             job_id=raw_job_id,
             prompt_id=prompt_id,
+            prompt_version=template.metadata.version,
+            prompt_sha=template.sha256,
             model=model,
             role=role,
             tier=tier_norm,
@@ -321,21 +326,39 @@ class LlmClient:
 
     async def collect_batch(
         self,
-        job_id: str,
+        job_id: BatchJob | str,
         output_model: type[T],
         role: str = "extraction",
         tier: str = "paid",
         provider_name: str = "google",
         session: Session | None = None,
     ) -> list[T]:
-        """Fetch completed batch outputs, validate against schema, and record costs."""
-        tier_norm = tier.lower()
-        cfg = models_config_manager.get_config()
-        role_cfg = cfg.roles.get(role, RoleConfig(model="gemini-3.5-flash-lite"))
-        model = role_cfg.model
+        """Fetch completed batch outputs, validate against schema, and record costs.
 
+        Accepts either a BatchJob instance or a raw batch job ID string.
+        """
+        if isinstance(job_id, BatchJob):
+            actual_job_id = job_id.job_id
+            actual_role = job_id.role
+            actual_tier = job_id.tier
+            target_model = job_id.model
+            prompt_id_rec = job_id.prompt_id
+            prompt_ver_rec = job_id.prompt_version
+            prompt_sha_rec = job_id.prompt_sha
+        else:
+            actual_job_id = job_id
+            actual_role = role
+            actual_tier = tier
+            cfg = models_config_manager.get_config()
+            role_cfg = cfg.roles.get(role, RoleConfig(model="gemini-3.5-flash-lite"))
+            target_model = role_cfg.model
+            prompt_id_rec = role
+            prompt_ver_rec = "1.0.0"
+            prompt_sha_rec = "batch"
+
+        tier_norm = actual_tier.lower()
         provider = provider_registry.get(provider_name)
-        responses = await provider.collect_batch(job_id)
+        responses = await provider.collect_batch(actual_job_id)
 
         results: list[T] = []
         for resp in responses:
@@ -343,7 +366,7 @@ class LlmClient:
             results.append(parsed)
 
             cost = pricing_registry.calculate_cost(
-                model=model,
+                model=target_model,
                 input_tokens=resp.input_tokens,
                 output_tokens=resp.output_tokens,
                 cached_tokens=resp.cached_tokens,
@@ -351,19 +374,19 @@ class LlmClient:
                 is_batch=True,
                 tier=tier_norm,
             )
-            budget_manager.record_spend(cost_usd=cost, role=role, model=model)
+            budget_manager.record_spend(cost_usd=cost, role=actual_role, model=target_model)
 
             if session is not None:
                 try:
                     record = LlmCallModel(
                         id=uuid7(),
-                        prompt_id=role,
-                        prompt_version="1.0.0",
-                        prompt_sha="batch",
+                        prompt_id=prompt_id_rec,
+                        prompt_version=prompt_ver_rec,
+                        prompt_sha=prompt_sha_rec,
                         provider=provider_name,
-                        model=model,
+                        model=target_model,
                         tier=tier_norm,
-                        batch_job_id=job_id,
+                        batch_job_id=actual_job_id,
                         params={},
                         input_tokens=resp.input_tokens,
                         cached_tokens=resp.cached_tokens,
