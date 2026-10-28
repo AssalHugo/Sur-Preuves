@@ -67,12 +67,11 @@ jobs:
         run: |
           make check
 
-      - name: Test POC skeleton pipeline
+      - name: Test POC skeleton pipeline (make poc)
         run: |
-          uv run csc ingest
-          uv run csc extract
-          uv run csc evidence
-          uv run csc synth
-          uv run csc verify
-          uv run csc publish bundle --include-drafts --poc
-          uv run csc backup create
+          make poc
+          make backup
+
+      - name: Verify review Docker build
+        run: |
+          docker build -f backend/Dockerfile.review .

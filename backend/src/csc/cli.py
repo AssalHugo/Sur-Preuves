@@ -198,18 +198,21 @@ def backup_create() -> None:
     # Vérifie si pg_dump est présent sur l'hôte
     pg_dump_path = shutil.which("pg_dump")
     if pg_dump_path:
+        db_url = settings.database_url.replace("postgresql+psycopg://", "postgresql://")
         cmd = [
             pg_dump_path,
             "-Fc",
             "-d",
-            settings.database_url,
+            db_url,
             "-f",
             str(backup_file),
         ]
         res = subprocess.run(cmd, capture_output=True, text=True, check=False)
-        if res.returncode == 0:
+        if res.returncode == 0 and backup_file.exists() and backup_file.stat().st_size > 0:
             console.print(f"[bold green]✓ Sauvegarde réussie :[/bold green] {backup_file}")
             return
+        if backup_file.exists() and backup_file.stat().st_size == 0:
+            backup_file.unlink(missing_ok=True)
         err_msg = res.stderr.strip()
         console.print(
             f"[yellow]! Échec avec pg_dump local ({err_msg}), essai via Docker...[/yellow]"
@@ -244,6 +247,9 @@ def backup_create() -> None:
             console.print(f"[bold red]✗ Échec du dump via Docker : {docker_err}[/bold red]")
         except Exception as e:
             console.print(f"[bold red]✗ Erreur lors de l'exécution Docker : {e}[/bold red]")
+        finally:
+            if backup_file.exists() and backup_file.stat().st_size == 0:
+                backup_file.unlink(missing_ok=True)
 
     # Si ni l'un ni l'autre n'a fonctionné
     console.print("[bold red]✗ Impossible de réaliser la sauvegarde.[/bold red]")
