@@ -41,6 +41,11 @@ class Settings(BaseSettings):
 
     # Connecteurs
     openalex_api_key: str | None = None
+    openalex_base_url: str = "https://api.openalex.org"
+    openalex_email: str | None = None
+    openalex_cache_dir: Path = Field(default=Path("var/cache/openalex"))
+    openalex_daily_budget_credits: float = 100000.0
+    openalex_budget_threshold_pct: float = 0.90
     nosparlementaires_api_key: str | None = None
 
     # Sauvegardes

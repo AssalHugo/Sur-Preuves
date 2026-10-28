@@ -13,6 +13,7 @@ torchvision = { index = "pytorch-cpu" }
 [dependency-groups]
 dev = [
     "pytest-asyncio>=1.4.1",
+    "respx>=0.23.1",
 ]
 
 [tool.pytest.ini_options]

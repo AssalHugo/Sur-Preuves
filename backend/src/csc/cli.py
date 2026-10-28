@@ -8,9 +8,24 @@ from pathlib import Path
 import typer
 from alembic.config import Config as AlembicConfig
 from rich.console import Console
+from rich.markup import escape
+from rich.table import Table
 
 from alembic import command as alembic_command
 from csc.config import settings
+from csc.connectors.openalex import (
+    OpenAlexBudgetExceededError,
+    OpenAlexError,
+    OpenAlexNotFoundError,
+    OpenAlexRateLimitError,
+    find_systematic_reviews,
+    get_default_client,
+    get_work,
+    search_works,
+    semantic_search_works,
+    top_authors,
+    top_institutions,
+)
 from csc.contracts.publish import export_bundle_schema
 from csc.db import check_db_status, init_vector_extension
 
@@ -340,7 +355,245 @@ def llm_ab_cmd(
 
 
 # L04 Connecteur OpenAlex
-_register_placeholder("openalex", "Connecteur API OpenAlex (L04)", "Lot L04")
+openalex_app = typer.Typer(
+    help="Connecteur API OpenAlex pour la recherche documentaire scientifique (L04).",
+    no_args_is_help=True,
+)
+app.add_typer(openalex_app, name="openalex")
+
+
+@openalex_app.command(name="search")
+def openalex_search_cmd(
+    query: str = typer.Argument(..., help="Termes de recherche (ex: carbon tax employment)"),
+    reviews_only: bool = typer.Option(
+        False,
+        "--reviews-only",
+        help="Restreindre aux revues systématiques et méta-analyses",
+    ),
+    semantic: bool = typer.Option(
+        False,
+        "--semantic",
+        help="Effectuer une recherche sémantique par similarité conceptuelle",
+    ),
+    sort: str = typer.Option(
+        "cited_by_count:desc",
+        "--sort",
+        "-s",
+        help="Critère de tri OpenAlex (ex: cited_by_count:desc, publication_year:desc)",
+    ),
+    limit: int = typer.Option(
+        10,
+        "--limit",
+        "-n",
+        help="Nombre maximal de résultats affichés",
+    ),
+) -> None:
+    """Recherche des publications scientifiques dans OpenAlex."""
+    mode_desc = (
+        "revues systématiques uniquement"
+        if reviews_only
+        else ("recherche sémantique" if semantic else "tous types")
+    )
+    console.print(f"[bold blue]Recherche OpenAlex :[/bold blue] {escape(query)} ({mode_desc})")
+
+    try:
+        if semantic:
+            filters = {"type": "review"} if reviews_only else None
+            works = semantic_search_works(
+                text=query,
+                filters=filters,
+                k=limit,
+            )
+        elif reviews_only:
+            works = find_systematic_reviews(
+                topic_query=query,
+                sort=sort,
+                max_results=limit,
+                per_page=limit,
+            )
+        else:
+            works = search_works(
+                query=query,
+                sort=sort,
+                max_results=limit,
+                per_page=limit,
+            )
+
+        if not works:
+            console.print("[yellow]Aucune publication trouvée.[/yellow]")
+            return
+
+        table = Table(title=f"Résultats OpenAlex ({len(works)} publications)")
+        table.add_column("Titre", style="bold cyan", no_wrap=False)
+        table.add_column("Année", style="magenta", justify="center")
+        table.add_column("Citations", style="green", justify="right")
+        table.add_column("Revue ?", style="yellow", justify="center")
+        table.add_column("DOI / ID", style="dim", no_wrap=False)
+
+        for w in works:
+            table.add_row(
+                escape(w.title),
+                str(w.year or "-"),
+                str(w.cited_by_count),
+                "Oui" if w.is_systematic_review else "Non",
+                escape(w.doi or w.openalex_id or "-"),
+            )
+
+        console.print(table)
+    except OpenAlexBudgetExceededError as exc:
+        console.print(f"[bold red]✗ Plafond de budget OpenAlex atteint :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+    except OpenAlexRateLimitError as exc:
+        console.print(f"[bold red]✗ Limite de débit OpenAlex atteinte :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+    except OpenAlexError as exc:
+        console.print(f"[bold red]✗ Erreur OpenAlex :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@openalex_app.command(name="get")
+def openalex_get_cmd(
+    id_or_doi: str = typer.Argument(
+        ..., help="DOI (ex: 10.1038/...) ou identifiant OpenAlex (ex: W2741809807)"
+    ),
+) -> None:
+    """Affiche les détails d'une publication scientifique spécifique."""
+    console.print(f"[bold blue]Consultation de la publication :[/bold blue] {escape(id_or_doi)}")
+    try:
+        w = get_work(id_or_doi)
+        console.print(f"[bold cyan]Titre :[/bold cyan] {escape(w.title)}")
+        console.print(f"[bold magenta]Année :[/bold magenta] {w.year or '-'}")
+        console.print(f"[bold]Revue / Lieu :[/bold] {escape(w.venue or '-')}")
+        console.print(f"[bold green]Citations :[/bold green] {w.cited_by_count}")
+        is_rev = "Oui" if w.is_systematic_review else "Non"
+        console.print(f"[bold yellow]Revue systématique :[/bold yellow] {is_rev}")
+        if w.doi:
+            console.print(f"[dim]DOI : https://doi.org/{escape(w.doi)}[/dim]")
+        if w.openalex_id:
+            console.print(f"[dim]OpenAlex : https://openalex.org/{escape(w.openalex_id)}[/dim]")
+        if w.authors:
+            console.print(
+                f"[bold]Auteurs ({len(w.authors)}) :[/bold] {escape(', '.join(w.authors))}"
+            )
+        if w.abstract:
+            console.print("\n[bold]Résumé :[/bold]")
+            console.print(w.abstract, markup=False)
+    except OpenAlexNotFoundError as exc:
+        console.print(f"[bold red]✗ Publication introuvable :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+    except OpenAlexError as exc:
+        console.print(f"[bold red]✗ Erreur OpenAlex :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@openalex_app.command(name="institutions")
+def openalex_institutions_cmd(
+    topic_id: str = typer.Argument(..., help="Identifiant du sujet (ex: T11636)"),
+    limit: int = typer.Option(3, "--limit", "-n", help="Nombre d'institutions à afficher"),
+) -> None:
+    """Affiche les institutions les plus influentes pour un topic OpenAlex."""
+    console.print(
+        f"[bold blue]Top institutions pour le sujet :[/bold blue] {escape(topic_id)} (max {limit})"
+    )
+    try:
+        institutions = top_institutions(topic_id, n=limit)
+        if not institutions:
+            console.print("[yellow]Aucune institution trouvée.[/yellow]")
+            return
+
+        table = Table(title=f"Top Institutions OpenAlex ({len(institutions)})")
+        table.add_column("Nom", style="bold cyan")
+        table.add_column("Pays", style="magenta", justify="center")
+        table.add_column("Type", style="dim")
+        table.add_column("Citations", style="green", justify="right")
+        table.add_column("Publications", justify="right")
+        table.add_column("ROR / ID", style="dim")
+
+        for inst in institutions:
+            table.add_row(
+                escape(inst.display_name),
+                escape(inst.country_code or "-"),
+                escape(inst.type or "-"),
+                str(inst.cited_by_count),
+                str(inst.works_count),
+                escape(inst.ror or inst.id),
+            )
+        console.print(table)
+    except OpenAlexError as exc:
+        console.print(f"[bold red]✗ Erreur OpenAlex :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@openalex_app.command(name="authors")
+def openalex_authors_cmd(
+    topic_id: str = typer.Argument(..., help="Identifiant du sujet (ex: T11636)"),
+    limit: int = typer.Option(20, "--limit", "-n", help="Nombre d'auteurs à afficher"),
+) -> None:
+    """Affiche les auteurs de référence pour un topic OpenAlex (vivier de relecteurs)."""
+    console.print(
+        f"[bold blue]Top auteurs pour le sujet :[/bold blue] {escape(topic_id)} (max {limit})"
+    )
+    try:
+        authors = top_authors(topic_id, n=limit)
+        if not authors:
+            console.print("[yellow]Aucun auteur trouvé.[/yellow]")
+            return
+
+        table = Table(title=f"Top Chercheurs OpenAlex ({len(authors)})")
+        table.add_column("Auteur", style="bold cyan")
+        table.add_column("Institution", style="magenta")
+        table.add_column("Citations", style="green", justify="right")
+        table.add_column("Publications", justify="right")
+        table.add_column("ORCID / ID", style="dim")
+
+        for a in authors:
+            table.add_row(
+                escape(a.display_name),
+                escape(a.last_known_institution or "-"),
+                str(a.cited_by_count),
+                str(a.works_count),
+                escape(a.orcid or a.id),
+            )
+        console.print(table)
+    except OpenAlexError as exc:
+        console.print(f"[bold red]✗ Erreur OpenAlex :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@openalex_app.command(name="budget")
+def openalex_budget_cmd() -> None:
+    """Affiche l'état de consommation du budget journalier gratuit OpenAlex."""
+    client = get_default_client()
+    status = client.budget_manager.get_status()
+
+    used = float(status.get("credits_used") or 0.0)
+    limit = float(status.get("daily_limit") or client.budget_manager.daily_limit)
+    threshold = limit * client.budget_manager.threshold_pct
+    pct = (used / limit * 100.0) if limit > 0 else 0.0
+
+    table = Table(title="Budget journalier OpenAlex (Compte gratuit : 1 $/jour)")
+    table.add_column("Indicateur", style="bold")
+    table.add_column("Valeur", style="cyan")
+
+    table.add_row("Date (UTC)", str(status.get("date")))
+    table.add_row("Crédits consommés aujourd'hui", f"{used:.1f} crédits (~{used * 0.00001:.4f} $)")
+    table.add_row("Plafond quotidien (1.00 $)", f"{limit:.1f} crédits")
+    table.add_row("Seuil d'arrêt propre (90 %)", f"{threshold:.1f} crédits")
+    table.add_row("Pourcentage consommé", f"{pct:.2f} %")
+
+    remaining_rep = status.get("remaining_reported")
+    if remaining_rep is not None:
+        table.add_row("Solde restant (rapporté par l'API)", f"{float(remaining_rep):.1f} crédits")
+
+    console.print(table)
+    if used >= threshold:
+        console.print(
+            "[bold red]! Le seuil de 90 % est atteint. Les prochaines requêtes réelles "
+            "seront bloquées pour préserver le budget gratuit.[/bold red]"
+        )
+    else:
+        console.print("[bold green]✓ Budget opérationnel, sous le seuil de 90 %.[/bold green]")
+
 
 # L05 Connecteur HAL
 _register_placeholder("hal", "Connecteur API HAL Solr (L05)", "Lot L05")

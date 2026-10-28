@@ -1,0 +1,43 @@
+{
+  "id": "https://openalex.org/W2741809807",
+  "doi": "https://doi.org/10.1038/s41558-019-0401-7",
+  "title": "Measuring the macroeconomic impact of carbon taxes",
+  "publication_year": 2020,
+  "type": "article",
+  "cited_by_count": 412,
+  "primary_location": {
+    "source": {
+      "display_name": "Nature Climate Change"
+    },
+    "landing_page_url": "https://doi.org/10.1038/s41558-019-0401-7"
+  },
+  "abstract_inverted_index": {
+    "We": [0],
+    "estimate": [1],
+    "the": [2],
+    "macroeconomic": [3],
+    "impacts": [4],
+    "of": [5],
+    "carbon": [6],
+    "tax": [7],
+    "policies": [8],
+    "on": [9],
+    "emissions": [10],
+    "and": [11],
+    "employment.": [12]
+  },
+  "authorships": [
+    {
+      "author": {
+        "id": "https://openalex.org/A5012345678",
+        "display_name": "Gilbert E. Metcalf"
+      }
+    },
+    {
+      "author": {
+        "id": "https://openalex.org/A5087654321",
+        "display_name": "James H. Stock"
+      }
+    }
+  ]
+}
