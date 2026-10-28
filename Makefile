@@ -24,9 +24,8 @@ setup:
 	@echo "==> Préparation de l'environnement..."
 	@test -f .env || cp .env.example .env
 	@mkdir -p var/pdf var/cache var/models var/backups
-	@echo "==> Installation des dépendances Python (uv)..."
-	@$(UV) venv
-	@$(UV) pip install -e "backend[dev]"
+	@echo "==> Installation des dépendances Python (uv sync)..."
+	@$(UV) sync --extra dev
 	@echo "==> Installation des dépendances Web (npm)..."
 	@cd web && npm install --no-audit --no-fund
 	@echo "==> Configuration terminée avec succès."
@@ -91,17 +90,18 @@ site:
 	@cd web && npm run build && npm run preview
 
 poc:
-	@echo "==> [POC 1/6] Ingestion documentaire..."
+	@echo "==> [POC 1/7] Ingestion documentaire..."
 	@$(CSC) ingest
-	@echo "==> [POC 2/6] Extraction des affirmations..."
+	@echo "==> [POC 2/7] Extraction des affirmations..."
 	@$(CSC) extract
-	@echo "==> [POC 3/6] Recherche de preuves scientifiques..."
+	@echo "==> [POC 3/7] Recherche de preuves scientifiques..."
 	@$(CSC) evidence
-	@echo "==> [POC 4/6] Synthèse des fiches..."
+	@echo "==> [POC 4/7] Synthèse des fiches..."
 	@$(CSC) synth
-	@echo "==> [POC 5/6] Vérification croisée..."
+	@echo "==> [POC 5/7] Vérification croisée..."
 	@$(CSC) verify
-	@echo "==> [POC 6/6] Publication du bundle POC..."
+	@echo "==> [POC 6/7] Publication du bundle POC..."
 	@$(CSC) publish bundle --include-drafts --poc
-	@echo "==> [POC 7/7] Lancement du site statique en local..."
-	@$(MAKE) site
+	@echo "==> [POC 7/7] Compilation du site Astro..."
+	@cd web && npm run build
+	@echo "==> Pipeline POC exécuté avec succès ! Pour prévisualiser le site : make site"

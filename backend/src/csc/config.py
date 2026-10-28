@@ -5,12 +5,15 @@ from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+_ROOT_ENV_FILE = _PROJECT_ROOT / ".env"
+
 
 class Settings(BaseSettings):
     """Paramètres globaux de l'application chargés depuis l'environnement ou .env."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(_ROOT_ENV_FILE, ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )

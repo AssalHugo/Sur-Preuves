@@ -19,6 +19,8 @@ dependencies = [
 [project.optional-dependencies]
 ingest = [
     "docling>=2.0.0",
+    "torch",
+    "torchvision",
 ]
 embed = [
     "fastembed>=0.2.0",
@@ -30,6 +32,10 @@ dev = [
     "ruff>=0.4.0",
     "types-pyyaml",
 ]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
 
 [project.scripts]
 csc = "csc.cli:app"

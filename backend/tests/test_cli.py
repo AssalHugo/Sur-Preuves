@@ -118,3 +118,60 @@ def test_backup_create_mock(runner: CliRunner, tmp_path: Path) -> None:
         result = runner.invoke(app, ["backup", "create"])
         assert result.exit_code == 0
         assert "Sauvegarde réussie via Docker" in result.stdout
+
+
+def test_backup_create_local_pg_dump(runner: CliRunner, tmp_path: Path) -> None:
+    """Vérifie que pg_dump local est invoqué avec une URL PostgreSQL nettoyée."""
+    captured_cmd: list[str] = []
+
+    def fake_run(
+        cmd: list[str],
+        capture_output: bool = False,
+        text: bool = False,
+        check: bool = False,
+    ) -> MagicMock:
+        captured_cmd.extend(cmd)
+        dest_file = Path(cmd[cmd.index("-f") + 1])
+        dest_file.write_bytes(b"dump content")
+        return MagicMock(returncode=0, stderr="")
+
+    with (
+        patch("csc.cli.settings.backup_dir", tmp_path),
+        patch("csc.cli.settings.database_url", "postgresql+psycopg://csc:csc@127.0.0.1:5432/csc"),
+        patch(
+            "shutil.which",
+            side_effect=lambda cmd: "/usr/bin/pg_dump" if cmd == "pg_dump" else None,
+        ),
+        patch("subprocess.run", side_effect=fake_run),
+    ):
+        result = runner.invoke(app, ["backup", "create"])
+        assert result.exit_code == 0
+        assert "✓ Sauvegarde réussie :" in result.stdout
+        assert "postgresql://csc:csc@127.0.0.1:5432/csc" in captured_cmd
+        assert "postgresql+psycopg://" not in " ".join(captured_cmd)
+
+
+def test_backup_create_failure_cleans_empty_file(runner: CliRunner, tmp_path: Path) -> None:
+    """Vérifie qu'un échec de dump ne laisse pas de fichier vide résiduel."""
+
+    def failing_docker_run(
+        cmd: list[str],
+        stdout: object = None,
+        stderr: object = None,
+        check: bool = False,
+    ) -> MagicMock:
+        return MagicMock(returncode=1, stderr=b"connection error")
+
+    with (
+        patch("csc.cli.settings.backup_dir", tmp_path),
+        patch(
+            "shutil.which",
+            side_effect=lambda cmd: "/usr/bin/docker" if cmd == "docker" else None,
+        ),
+        patch("subprocess.run", side_effect=failing_docker_run),
+    ):
+        result = runner.invoke(app, ["backup", "create"])
+        assert result.exit_code == 1
+        assert "Impossible de réaliser la sauvegarde" in result.stdout
+        remaining = list(tmp_path.glob("*.dump"))
+        assert len(remaining) == 0

@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copie et installation du package Python csc
-COPY backend/pyproject.toml /app/backend/
+COPY backend/pyproject.toml backend/README.md /app/backend/
 COPY backend/src /app/backend/src
 
 RUN uv pip install --system -e /app/backend

@@ -48,6 +48,8 @@ dist/
 *.swp
 *.swo
 *~
+*#
+.~lock.*#
 .DS_Store
 
 # Re-include var directory structure but ignore contents
