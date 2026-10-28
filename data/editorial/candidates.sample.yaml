@@ -1,0 +1,26 @@
+version: "1.0.0"
+candidates:
+  - id: "0192d1c0-0001-7000-8000-000000000001"
+    slug: "claire-delacroix"
+    name: "Claire Delacroix"
+    parties:
+      - "PES"
+    parliamentary_group_id: "ECO-SOL"
+    status: "declared"
+    photo_url: "/images/candidates/claire-delacroix.jpg"
+  - id: "0192d1c0-0002-7000-8000-000000000002"
+    slug: "alexandre-leroy"
+    name: "Alexandre Leroy"
+    parties:
+      - "RRD"
+    parliamentary_group_id: "REP-DEM"
+    status: "declared"
+    photo_url: "/images/candidates/alexandre-leroy.jpg"
+  - id: "0192d1c0-0003-7000-8000-000000000003"
+    slug: "mariam-diallo"
+    name: "Mariam Diallo"
+    parties:
+      - "PMI"
+    parliamentary_group_id: "PROG-INNOV"
+    status: "official"
+    photo_url: "/images/candidates/mariam-diallo.jpg"

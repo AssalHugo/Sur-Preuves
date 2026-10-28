@@ -1,0 +1,881 @@
+{
+  "$defs": {
+    "AiDisclosure": {
+      "description": "Mentions obligatoires sur l'usage de l'intelligence artificielle (Art. 50 AI Act).",
+      "properties": {
+        "ai_assisted": {
+          "default": true,
+          "description": "Indicateur d'assistance par intelligence artificielle",
+          "title": "Ai Assisted",
+          "type": "boolean"
+        },
+        "statement": {
+          "default": "Brouillons rédigés avec l'assistance d'un modèle d'IA (Gemini), systématiquement soumis à des contrôles déterministes et validés par des relecteurs humains qualifiés sous la responsabilité du conseil scientifique de Comparateur Science 2027.",
+          "description": "Mention publique d'information éditoriale",
+          "title": "Statement",
+          "type": "string"
+        },
+        "digital_source_type": {
+          "default": "trainedAlgorithmicMedia",
+          "description": "Métadonnée IPTC conforme à la provenance algorithmique",
+          "title": "Digital Source Type",
+          "type": "string"
+        },
+        "methodology_url": {
+          "default": "/methodologie/",
+          "description": "URL locale vers la méthodologie détaillée et les protocoles de vérification",
+          "title": "Methodology Url",
+          "type": "string"
+        },
+        "supervision_notice": {
+          "default": "Aucune évaluation, notation ni verdict n'est publié sans validation explicite par un relecteur scientifique humain. Aucun profilage ni traitement automatisé de données visiteur n'est opéré.",
+          "description": "Garantie de conformité éthique et RGPD",
+          "title": "Supervision Notice",
+          "type": "string"
+        }
+      },
+      "title": "AiDisclosure",
+      "type": "object"
+    },
+    "Assessment": {
+      "description": "Fiche d'évaluation d'une affirmation politique au regard de la science.",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "claim_id": {
+          "description": "Référence vers Claim",
+          "format": "uuid",
+          "title": "Claim Id",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "description": "Numéro de version séquentiel",
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/ReviewStatus",
+          "default": "ai_draft",
+          "description": "Statut dans le workflow éditorial"
+        },
+        "factual_verdict": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FactualVerdict"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Verdict factuel si claim de type factual"
+        },
+        "consensus_level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConsensusLevel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Niveau de consensus si claim de type causal"
+        },
+        "evidence_direction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceDirection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Orientation générale des preuves recensées"
+        },
+        "sms_max": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Score Maryland SMS le plus élevé parmi les preuves",
+          "title": "Sms Max"
+        },
+        "summary": {
+          "description": "Résumé accessible de la fiche (<= 80 mots)",
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "sections": {
+          "$ref": "#/$defs/AssessmentSections",
+          "description": "Sections structurées du corps"
+        },
+        "sentences": {
+          "description": "Liste ordonnée des phrases composant la fiche",
+          "items": {
+            "$ref": "#/$defs/Sentence"
+          },
+          "title": "Sentences",
+          "type": "array"
+        },
+        "reviews": {
+          "description": "Historique des relectures humaines associées",
+          "items": {
+            "$ref": "#/$defs/Review"
+          },
+          "title": "Reviews",
+          "type": "array"
+        },
+        "limitations": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Limites méthodologiques explicites de la fiche",
+          "title": "Limitations"
+        },
+        "synthesiser_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Modèle LLM ayant rédigé le brouillon (ex: gemini-4-argon)",
+          "title": "Synthesiser Model"
+        },
+        "created_at": {
+          "description": "Date de création",
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Dernière modification",
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "claim_id",
+        "summary"
+      ],
+      "title": "Assessment",
+      "type": "object"
+    },
+    "AssessmentSections": {
+      "description": "Sections structurées du corps de la fiche d'évaluation.",
+      "properties": {
+        "diagnostic": {
+          "default": "",
+          "description": "Diagnostic de la situation et formulation du problème",
+          "title": "Diagnostic",
+          "type": "string"
+        },
+        "mechanism": {
+          "default": "",
+          "description": "Analyse du mécanisme causal ou vérification factuelle",
+          "title": "Mechanism",
+          "type": "string"
+        },
+        "evidence": {
+          "default": "",
+          "description": "Synthèse des études empiriques et de leur robustesse",
+          "title": "Evidence",
+          "type": "string"
+        },
+        "blind_spots": {
+          "default": "",
+          "description": "Angles morts, effets rebonds et impacts redistributifs",
+          "title": "Blind Spots",
+          "type": "string"
+        },
+        "success_conditions": {
+          "default": "",
+          "description": "Conditions de réussite et sensibilité au contexte",
+          "title": "Success Conditions",
+          "type": "string"
+        },
+        "controversies": {
+          "default": "",
+          "description": "Controverses scientifiques non tranchées",
+          "title": "Controversies",
+          "type": "string"
+        }
+      },
+      "title": "AssessmentSections",
+      "type": "object"
+    },
+    "Candidate": {
+      "description": "Candidat ou candidate à l'élection présidentielle.",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "slug": {
+          "description": "Identifiant textuel d'URL (ex: claire-delacroix)",
+          "minLength": 1,
+          "title": "Slug",
+          "type": "string"
+        },
+        "name": {
+          "description": "Nom complet public",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "parties": {
+          "description": "Partis de rattachement",
+          "items": {
+            "type": "string"
+          },
+          "title": "Parties",
+          "type": "array"
+        },
+        "parliamentary_group_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Groupe parlementaire lié le cas échéant",
+          "title": "Parliamentary Group Id"
+        },
+        "status": {
+          "$ref": "#/$defs/CandidateStatus",
+          "default": "declared",
+          "description": "Statut de la candidature"
+        },
+        "photo_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL de la photo officielle",
+          "title": "Photo Url"
+        }
+      },
+      "required": [
+        "slug",
+        "name"
+      ],
+      "title": "Candidate",
+      "type": "object"
+    },
+    "CandidateStatus": {
+      "description": "Statut de déclaration du candidat à l'élection présidentielle.",
+      "enum": [
+        "declared",
+        "official"
+      ],
+      "title": "CandidateStatus",
+      "type": "string"
+    },
+    "ChangelogEntry": {
+      "description": "Entrée d'historique de modification d'une fiche.",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "assessment_id": {
+          "description": "Référence vers Assessment",
+          "format": "uuid",
+          "title": "Assessment Id",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "description": "Version concernée",
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "changed_at": {
+          "description": "Date de la modification",
+          "format": "date-time",
+          "title": "Changed At",
+          "type": "string"
+        },
+        "reason": {
+          "description": "Motif de la modification",
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "author": {
+          "description": "Auteur ou relecteur ayant effectué la révision",
+          "minLength": 1,
+          "title": "Author",
+          "type": "string"
+        }
+      },
+      "required": [
+        "assessment_id",
+        "reason",
+        "author"
+      ],
+      "title": "ChangelogEntry",
+      "type": "object"
+    },
+    "ConsensusLevel": {
+      "description": "Niveau de consensus scientifique pour les affirmations de type causal.",
+      "enum": [
+        "strong",
+        "emerging",
+        "contested",
+        "insufficient_evidence",
+        "novel_no_ex_post"
+      ],
+      "title": "ConsensusLevel",
+      "type": "string"
+    },
+    "EvidenceDirection": {
+      "description": "Direction dans laquelle pointe la preuve scientifique par rapport à l'affirmation.",
+      "enum": [
+        "supports",
+        "mixed",
+        "contradicts",
+        "inconclusive"
+      ],
+      "title": "EvidenceDirection",
+      "type": "string"
+    },
+    "EvidenceQuery": {
+      "description": "Requête de recherche documentaire scientifique (traçabilité publique).",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "claim_id": {
+          "description": "Référence vers Claim",
+          "format": "uuid",
+          "title": "Claim Id",
+          "type": "string"
+        },
+        "source": {
+          "description": "Source interrogée (openalex, hal, semantic_scholar...)",
+          "title": "Source",
+          "type": "string"
+        },
+        "exact_query": {
+          "description": "Texte exact ou filtres de la requête",
+          "minLength": 1,
+          "title": "Exact Query",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "description": "Paramètres d'API détaillés",
+          "title": "Parameters",
+          "type": "object"
+        },
+        "queried_at": {
+          "description": "Date et heure de l'interrogation",
+          "format": "date-time",
+          "title": "Queried At",
+          "type": "string"
+        },
+        "results_count": {
+          "default": 0,
+          "description": "Nombre de résultats renvoyés par l'API",
+          "minimum": 0,
+          "title": "Results Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "claim_id",
+        "source",
+        "exact_query"
+      ],
+      "title": "EvidenceQuery",
+      "type": "object"
+    },
+    "FactualVerdict": {
+      "description": "Verdict factuel pour les affirmations de type factual.",
+      "enum": [
+        "accurate",
+        "approximate",
+        "misleading",
+        "inaccurate",
+        "unverifiable"
+      ],
+      "title": "FactualVerdict",
+      "type": "string"
+    },
+    "Review": {
+      "description": "Relecture humaine d'une version de fiche.",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "assessment_id": {
+          "description": "Référence vers Assessment",
+          "format": "uuid",
+          "title": "Assessment Id",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "description": "Numéro de version de fiche évaluée",
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "reviewer_id": {
+          "description": "Référence vers Reviewer",
+          "format": "uuid",
+          "title": "Reviewer Id",
+          "type": "string"
+        },
+        "decision": {
+          "$ref": "#/$defs/ReviewDecision",
+          "description": "Décision finale de la relecture"
+        },
+        "comments": {
+          "description": "Commentaires qualitatifs du relecteur",
+          "minLength": 1,
+          "title": "Comments",
+          "type": "string"
+        },
+        "submitted_at": {
+          "description": "Horodatage de soumission",
+          "format": "date-time",
+          "title": "Submitted At",
+          "type": "string"
+        },
+        "duration_minutes": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Temps passé en minutes pour audit de charge",
+          "title": "Duration Minutes"
+        }
+      },
+      "required": [
+        "assessment_id",
+        "reviewer_id",
+        "decision",
+        "comments"
+      ],
+      "title": "Review",
+      "type": "object"
+    },
+    "ReviewDecision": {
+      "description": "Décision prise par un relecteur humain sur une version de fiche.",
+      "enum": [
+        "approved",
+        "changes_requested",
+        "rejected"
+      ],
+      "title": "ReviewDecision",
+      "type": "string"
+    },
+    "ReviewStatus": {
+      "description": "Cycle de vie d'une fiche d'évaluation.",
+      "enum": [
+        "ai_draft",
+        "in_review",
+        "changes_requested",
+        "approved",
+        "published",
+        "withdrawn"
+      ],
+      "title": "ReviewStatus",
+      "type": "string"
+    },
+    "ScholarlyWork": {
+      "description": "Publication scientifique évaluée par les pairs ou rapport institutionnel de référence.",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Digital Object Identifier normalisé",
+          "title": "Doi"
+        },
+        "openalex_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifiant OpenAlex (ex: W123456)",
+          "title": "Openalex Id"
+        },
+        "hal_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifiant HAL (ex: hal-01234567)",
+          "title": "Hal Id"
+        },
+        "s2_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifiant Semantic Scholar (S2)",
+          "title": "S2 Id"
+        },
+        "title": {
+          "description": "Titre complet de la publication",
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "maximum": 2100,
+              "minimum": 1800,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Année de parution",
+          "title": "Year"
+        },
+        "venue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revue, conférence ou institution émettrice",
+          "title": "Venue"
+        },
+        "cited_by_count": {
+          "default": 0,
+          "description": "Nombre de citations recensées",
+          "minimum": 0,
+          "title": "Cited By Count",
+          "type": "integer"
+        },
+        "abstract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Résumé officiel de la publication",
+          "title": "Abstract"
+        },
+        "design": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Devis de recherche ou méthodologie (ex: RCT, DiD, RDD)",
+          "title": "Design"
+        },
+        "sms_level": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Niveau sur l'échelle Maryland SMS (1 à 5)",
+          "title": "Sms Level"
+        },
+        "is_systematic_review": {
+          "default": false,
+          "description": "Indique s'il s'agit d'une revue systématique ou méta-analyse",
+          "title": "Is Systematic Review",
+          "type": "boolean"
+        },
+        "authors": {
+          "description": "Liste des auteurs principaux",
+          "items": {
+            "type": "string"
+          },
+          "title": "Authors",
+          "type": "array"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Lien d'accès ou de consultation",
+          "title": "Url"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "title": "ScholarlyWork",
+      "type": "object"
+    },
+    "Sentence": {
+      "description": "Phrase d'une fiche d'évaluation avec obligations de citation vérifiées.",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "description": "Texte de la phrase",
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/SentenceKind",
+          "default": "statement",
+          "description": "Nature de la phrase dans la fiche"
+        },
+        "citations": {
+          "description": "Identifiants d'EvidenceItem uniquement étayant cette phrase",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "Sentence",
+      "type": "object"
+    },
+    "SentenceKind": {
+      "description": "Catégorie fonctionnelle d'une phrase de fiche de synthèse.",
+      "enum": [
+        "context",
+        "statement",
+        "mechanism",
+        "evidence",
+        "blind_spots",
+        "conditions",
+        "controversy",
+        "limitation"
+      ],
+      "title": "SentenceKind",
+      "type": "string"
+    },
+    "Theme": {
+      "description": "Taxonomie d'environ 15 thèmes des politiques publiques.",
+      "enum": [
+        "economie-emploi",
+        "fiscalite",
+        "retraites",
+        "sante",
+        "education",
+        "energie",
+        "climat",
+        "agriculture",
+        "logement",
+        "securite-justice",
+        "immigration",
+        "transport",
+        "numerique",
+        "institutions",
+        "europe-international"
+      ],
+      "title": "Theme",
+      "type": "string"
+    },
+    "ThemeMetadata": {
+      "description": "Métadonnées éditoriales décrivant un thème politique.",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Theme",
+          "description": "Identifiant canonique du thème"
+        },
+        "label": {
+          "description": "Libellé éditorial en français",
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "description": {
+          "description": "Périmètre thématique et enjeux",
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "description"
+      ],
+      "title": "ThemeMetadata",
+      "type": "object"
+    }
+  },
+  "description": "Bundle JSON versionné consommé par le générateur de site statique Astro (L15).",
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "description": "Version du schéma du bundle de publication (Semantic Versioning)",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "generated_at": {
+      "description": "Horodatage ISO 8601 de génération du bundle",
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "candidates": {
+      "description": "Candidats officiels ou déclarés retenus dans le comparateur",
+      "items": {
+        "$ref": "#/$defs/Candidate"
+      },
+      "title": "Candidates",
+      "type": "array"
+    },
+    "themes": {
+      "description": "Taxonomie complète des thématiques évaluées",
+      "items": {
+        "$ref": "#/$defs/ThemeMetadata"
+      },
+      "title": "Themes",
+      "type": "array"
+    },
+    "assessments": {
+      "description": "Fiches d'évaluation (statut approuvé ou publié uniquement en production)",
+      "items": {
+        "$ref": "#/$defs/Assessment"
+      },
+      "title": "Assessments",
+      "type": "array"
+    },
+    "works": {
+      "description": "Publications scientifiques mobilisées dans les fiches",
+      "items": {
+        "$ref": "#/$defs/ScholarlyWork"
+      },
+      "title": "Works",
+      "type": "array"
+    },
+    "queries": {
+      "description": "Traçabilité publique des requêtes documentaires exécutées",
+      "items": {
+        "$ref": "#/$defs/EvidenceQuery"
+      },
+      "title": "Queries",
+      "type": "array"
+    },
+    "changelog": {
+      "description": "Historique public des révisions et rectifications",
+      "items": {
+        "$ref": "#/$defs/ChangelogEntry"
+      },
+      "title": "Changelog",
+      "type": "array"
+    },
+    "ai_disclosure": {
+      "$ref": "#/$defs/AiDisclosure",
+      "description": "Mentions de transparence et conformité réglementaire"
+    }
+  },
+  "title": "PublicationBundle",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

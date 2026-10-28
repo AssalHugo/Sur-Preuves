@@ -1,0 +1,53 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: "Schéma éditorial des candidats"
+description: "Validation des candidats à l'élection présidentielle 2027"
+type: object
+required:
+  - candidates
+properties:
+  version:
+    type: string
+    description: "Version du fichier éditorial"
+  candidates:
+    type: array
+    description: "Liste des candidats et candidates"
+    items:
+      type: object
+      required:
+        - slug
+        - name
+        - parties
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: "Identifiant UUIDv7 stable"
+        slug:
+          type: string
+          pattern: "^[a-z0-9]+(-[a-z0-9]+)*$"
+          description: "Identifiant textuel d'URL (kebab-case)"
+        name:
+          type: string
+          minLength: 1
+          description: "Nom complet officiel du candidat"
+        parties:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: "Sigles des partis politiques de rattachement"
+        parliamentary_group_id:
+          type: ["string", "null"]
+          description: "Identifiant du groupe parlementaire lié"
+        status:
+          type: string
+          enum:
+            - declared
+            - official
+          description: "Statut déclaré ou officiellement validé par le Conseil constitutionnel"
+        photo_url:
+          type: ["string", "null"]
+          description: "Chemin ou URL de la photo officielle du candidat"
+      additionalProperties: false
+additionalProperties: false
