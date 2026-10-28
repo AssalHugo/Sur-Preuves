@@ -1,40 +1,83 @@
-# Configuration des modèles LLM et embeddings (L03 / L08)
-default_embedding_model: "intfloat/multilingual-e5-large"
-embedding_dimension: 1024
+# Configuration des modèles LLM et embeddings (L03)
+# Conforme à la spécification du LOT 3 (Gemini uniquement, embeddings CPU)
 
 roles:
   extraction:
-    provider: "gemini"
-    model: "gemini-2.5-flash"  # Flash-Lite / 2.5 Flash
-    temperature: 0.0
+    provider: google
+    model: gemini-3.5-flash-lite
+    batch: true
+    thinking: low
     max_output_tokens: 2048
-
-  evidence_query:
-    provider: "gemini"
-    model: "gemini-2.5-flash"
     temperature: 0.0
+
+  query_planning:
+    provider: google
+    model: gemini-3.5-flash-lite
+    batch: true
+    thinking: low
     max_output_tokens: 1024
+    temperature: 0.0
 
-  synthesis_causal:
-    provider: "gemini"
-    model: "gemini-2.5-pro"  # Gemini Argon / Pro
-    temperature: 0.2
+  sms_grading:
+    provider: google
+    model: gemini-3.5-flash-lite
+    batch: true
+    thinking: low
+    max_output_tokens: 1024
+    temperature: 0.0
+
+  synthesis:
+    provider: google
+    model: gemini-4-argon
+    batch: true
+    thinking: medium
     max_output_tokens: 8192
+    temperature: 0.2
+    fallback: gemini-3.1-pro-preview
 
-  synthesis_factual:
-    provider: "gemini"
-    model: "gemini-2.5-flash"
-    temperature: 0.1
+  synthesis_simple:
+    provider: google
+    model: gemini-3.5-flash-lite
+    batch: true
+    thinking: low
     max_output_tokens: 4096
+    temperature: 0.1
 
   verification:
-    provider: "gemini"
-    model: "gemini-2.5-flash"
-    temperature: 0.0
+    provider: google
+    model: gemini-3.5-flash-lite
+    batch: true
+    thinking: low
     max_output_tokens: 4096
+    temperature: 0.0
 
-  stability_test:
-    provider: "gemini"
-    model: "gemini-2.5-pro"
-    temperature: 0.3
+  stability:
+    provider: google
+    model: gemini-4-argon
+    batch: true
+    thinking: medium
     max_output_tokens: 8192
+    temperature: 0.3
+
+  tone_lint:
+    provider: google
+    model: gemini-3.5-flash-lite
+    batch: true
+    max_output_tokens: 2048
+    temperature: 0.0
+
+embedding:
+  provider: local
+  model: intfloat/multilingual-e5-large
+  dimension: 1024
+  dev_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  dev_dimension: 384
+
+# Table de routage spécifique : modèle de synthèse -> vérificateur
+# Garantit l'absence de corrélation entre rédacteur et vérificateur
+verification_overrides:
+  gemini-3.5-flash-lite: gemini-3.1-flash-lite
+
+policy:
+  require_distinct_verification_model: true     # Bloquant : verification.model != synthesis.model
+  require_distinct_verification_provider: false # Passer à true quand un second fournisseur sera ajouté

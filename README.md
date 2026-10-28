@@ -107,6 +107,28 @@ comparateur-science-2027/
 
 ---
 
+## Couche LLM & Plafond budgétaire strict (Lot L03)
+
+Le projet utilise exclusivement l'API Gemini (`google-genai`) avec des règles strictes d'économie et d'audit :
+- **Batch API obligatoire par défaut** pour le palier payant (-50 % sur les tarifs d'inférence).
+- **Double plafond mensuel** :
+  1. **Plafond logiciel interne** (`LLM_MONTHLY_CAP_USD`, par défaut **9,00 $/mois**) : vérifié **avant** chaque envoi d'inférence (`BudgetExceededError`), avec découpage automatique des batches si nécessaire.
+  2. **Filet de sécurité Google AI Studio (*Project Spend Cap*) réglé à 10 $/mois** par l'humain.
+
+### Procédure de configuration du *Project Spend Cap* (Google AI Studio / GCP) :
+1. Se connecter sur la console [Google Cloud Platform / AI Studio](https://aistudio.google.com/).
+2. Accéder à **Facturation / Budgets et alertes** (*Billing & Budgets*).
+3. Définir un plafond de dépense mensuel strict (*Spend Cap*) de **10,00 $ USD** pour le projet associé à `GEMINI_API_KEY`.
+4. Configurer des alertes par e-mail à 50 %, 80 % et 100 % de l'enveloppe budgétaire.
+
+### Commandes CLI LLM :
+- `uv run csc llm budget` : affiche le budget consommé ce mois, le restant, la projection et le détail par rôle/modèle.
+- `uv run csc llm cost --since YYYY-MM-DD` : affiche le journal d'audit des dépenses depuis une date.
+- `uv run csc llm estimate <prompt_id> --items-count N` : simule le coût et les tokens d'un traitement sans appel réseau.
+- `uv run csc llm ab --role synthesis --models gemini-4-argon,gemini-3.1-pro-preview` : prépare l'évaluation A/B à l'aveugle.
+
+---
+
 ## Licences
 
 - **Code source** : [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)
