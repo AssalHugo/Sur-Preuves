@@ -309,3 +309,47 @@ def test_evidence_query_database_persistence(
     assert added_obj.results_count == 1
     assert "W2741809807" in added_obj.exact_query
     assert mock_session.flush.called
+
+
+@respx.mock
+def test_get_work_by_uppercase_doi(
+    mock_openalex_client: OpenAlexClient, load_cassette: Any
+) -> None:
+    cassette = load_cassette("single_work")
+    doi_route = respx.get(
+        "https://api.openalex.org/works/https://doi.org/10.1038/s41558-019-0401-7"
+    ).mock(return_value=Response(200, json=cassette))
+
+    work1 = mock_openalex_client.get_work("DOI:10.1038/S41558-019-0401-7")
+    assert doi_route.called
+    assert work1.doi == "10.1038/s41558-019-0401-7"
+
+    # Vérification avec URL en majuscules
+    work2 = mock_openalex_client.get_work("HTTPS://DOI.ORG/10.1038/S41558-019-0401-7")
+    assert work2.doi == "10.1038/s41558-019-0401-7"
+
+
+def test_client_context_manager_and_query_eviction(
+    mock_openalex_client: OpenAlexClient,
+) -> None:
+    with mock_openalex_client as client:
+        assert client._get_http_client() is not None
+        assert not client._get_http_client().is_closed
+
+    assert client._client is not None
+    assert client._client.is_closed
+
+    # Test d'éviction et nettoyage des requêtes en mémoire
+    for i in range(1005):
+        client._record_evidence_query(
+            exact_query=f"query_{i}",
+            parameters={},
+            results_count=1,
+        )
+
+    assert len(client.recorded_queries) == 1000
+    assert client.recorded_queries[0].exact_query == "query_5"
+    assert client.recorded_queries[-1].exact_query == "query_1004"
+
+    client.clear_recorded_queries()
+    assert len(client.recorded_queries) == 0

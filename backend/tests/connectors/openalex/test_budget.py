@@ -62,3 +62,10 @@ def test_budget_reset_on_new_day(tmp_budget_manager: OpenAlexBudgetManager) -> N
     status = tmp_budget_manager.get_status()
     assert float(status["credits_used"] or 0.0) == 0.0
     tmp_budget_manager.check_budget_before_call()  # Ne lève plus d'exception
+
+
+def test_budget_default_resolve_ledger_root() -> None:
+    from csc.config import _PROJECT_ROOT
+
+    manager = OpenAlexBudgetManager()
+    assert manager._resolve_ledger_path() == _PROJECT_ROOT / "var/cache/openalex/daily_credits.json"

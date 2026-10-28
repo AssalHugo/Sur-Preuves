@@ -32,8 +32,10 @@ class OpenAlexBudgetManager:
     def _resolve_ledger_path(self) -> Path:
         target = self.ledger_dir
         if not target.is_absolute():
-            root = Path(__file__).resolve().parents[4]
-            target = root / target
+            # Racine du dépôt (civic-tech/)
+            from csc.config import _PROJECT_ROOT
+
+            target = _PROJECT_ROOT / target
         target.mkdir(parents=True, exist_ok=True)
         return target / "daily_credits.json"
 
@@ -76,10 +78,17 @@ class OpenAlexBudgetManager:
 
     def _write_ledger(self, data: dict[str, float | str | None]) -> None:
         path = self._resolve_ledger_path()
+        tmp_path = path.with_suffix(".tmp")
         try:
-            path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+            tmp_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+            tmp_path.replace(path)
         except Exception as exc:
             logger.warning("Échec d'écriture du registre de crédits OpenAlex : %s", exc)
+            if tmp_path.exists():
+                try:
+                    tmp_path.unlink()
+                except OSError:
+                    pass
 
     def get_status(self) -> dict[str, float | str | None]:
         """Retourne l'état courant de consommation des crédits journaliers."""

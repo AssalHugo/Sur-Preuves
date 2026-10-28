@@ -71,11 +71,19 @@ top_authors(topic_id: str, n=20) -> list[Author]
 
 ### F. Commandes CLI Typer (`backend/src/csc/cli.py`)
 - `csc openalex search "carbon tax employment" --reviews-only` : affiche les revues systématiques triées par citations sous forme de tableau Rich.
-- `csc openalex search "<query>" [--limit N] [--sort ...]` : recherche générale dans OpenAlex.
+- `csc openalex search "<query>" [--semantic] [--limit N] [--sort ...]` : recherche générale ou recherche sémantique par similarité conceptuelle.
 - `csc openalex get "<doi_or_id>"` : fiche détaillée avec titre, résumé reconstitué, auteurs et métadonnées.
 - `csc openalex institutions "<topic_id>" [--limit N]` : top des établissements de recherche.
 - `csc openalex authors "<topic_id>" [--limit N]` : top des chercheurs sur le sujet.
 - `csc openalex budget` : tableau récapitulatif des crédits consommés, du plafond (1,00 $) et du seuil d'arrêt propre.
+
+### G. Révisions issues de la revue de code
+- **Résolution de chemin racine** : utilisation de `_PROJECT_ROOT` depuis `csc.config` dans `OpenAlexHttpCache` et `OpenAlexBudgetManager`, garantissant que les fichiers sont placés dans `var/cache/openalex/` à la racine du dépôt.
+- **Sécurisation de l'affichage Rich (crochets & balises scientifiques)** : échappement systématique des entrées utilisateur, titres et auteurs avec `rich.markup.escape`, et affichage des abstracts avec `markup=False` pour éviter tout crash `MarkupError` sur les balises scientifiques (`[95% CI]`, `[/B]`).
+- **Normalisation insensible à la casse des DOI** : `get_work` détecte correctement les préfixes `DOI:`, `https://doi.org/` et variantes majuscules.
+- **Extraction robuste d'identifiant OpenAlex** : `normalize_openalex_id` extrait le segment terminal canonique quel que soit le format d'entrée (`https://api.openalex.org/works/...`, `topics/...`, etc.).
+- **Écriture atomique sur disque** : écriture dans un fichier temporaire puis remplacement atomique (`Path.replace`) pour le cache HTTP et le registre budgétaire.
+- **Gestion de connexion Keep-Alive & bornage mémoire** : session HTTP réutilisable sur `OpenAlexClient` avec méthode `close()` et context manager, et limitation de l'historique `recorded_queries` à 1000 entrées avec méthode `clear_recorded_queries()`.
 
 ---
 
@@ -86,16 +94,16 @@ La cible **`make check` est 100 % verte**, sans avertissement ni contournement :
 2. **Linting Python (`ruff check`)** : 0 erreur, 0 avertissement.
 3. **Typage statique strict (`mypy --strict`)** : **0 erreur sur 67 fichiers source**.
 4. **Tests Python (`pytest`)** :
-   - **140 tests passés avec succès** (2 ignorés réservés aux tests live API Gemini).
-   - **43 nouveaux tests** dédiés au connecteur OpenAlex :
+   - **146 tests passés avec succès** (2 ignorés réservés aux tests live API Gemini).
+   - **49 tests dédiés** au connecteur OpenAlex :
      - Parsing et reconstruction d'abstracts (`test_models.py`).
-     - Normalisation des DOI et identifiants (`test_models.py`).
+     - Normalisation robuste des DOI et identifiants (`test_models.py`).
      - Détection des revues systématiques (`test_models.py`).
-     - Hachage d'URL, masquage de clé et expiration TTL (`test_cache.py`).
+     - Hachage d'URL, masquage de clé, expiration TTL et résolution de chemin (`test_cache.py`).
      - Token bucket et limitation sémantique 1 req/s (`test_rate_limiter.py`).
-     - Compteur de crédits et arrêt propre à 90 % (`test_budget.py`).
-     - Pagination par curseur, retries 429 / 500 et traçabilité (`test_client.py`).
-     - Commandes CLI et rendu des tableaux (`test_cli.py`).
+     - Compteur de crédits, arrêt propre à 90 % et résolution de chemin (`test_budget.py`).
+     - Pagination par curseur, retries 429 / 500, persistance traçabilité, support DOI majuscules et Keep-Alive / éviction (`test_client.py`).
+     - Commandes CLI, mode sémantique et tolérance aux balises scientifiques (`test_cli.py`).
 5. **Vérification et build du site statique Astro** : 0 erreur, 0 warning, build statique réussi.
 
 ---

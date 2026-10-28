@@ -97,3 +97,10 @@ def test_cache_clear(tmp_openalex_cache: OpenAlexHttpCache) -> None:
 
     tmp_openalex_cache.clear()
     assert len(list(cache_dir.glob("*.json"))) == 0
+
+
+def test_cache_default_resolve_dir_root() -> None:
+    from csc.config import _PROJECT_ROOT
+
+    cache = OpenAlexHttpCache()
+    assert cache._resolve_dir() == _PROJECT_ROOT / "var/cache/openalex"

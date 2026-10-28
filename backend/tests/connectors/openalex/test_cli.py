@@ -133,3 +133,48 @@ def test_cli_openalex_budget(runner: CliRunner) -> None:
     assert "100000.0 crédits" in result.stdout
     assert "Seuil d'arrêt propre (90 %)" in result.stdout
     assert "Budget opérationnel" in result.stdout
+
+
+@respx.mock
+def test_cli_openalex_search_semantic(runner: CliRunner, load_cassette: Any) -> None:
+    cassette = load_cassette("works_search")
+    respx.get("https://api.openalex.org/works").mock(return_value=Response(200, json=cassette))
+
+    result = runner.invoke(
+        app,
+        ["openalex", "search", "impact of environmental taxes", "--semantic", "--limit", "3"],
+    )
+
+    assert result.exit_code == 0
+    assert "recherche sémantique" in result.stdout
+    assert "Résultats OpenAlex (3 publications)" in result.stdout
+
+
+@respx.mock
+def test_cli_openalex_get_work_markup_safety(runner: CliRunner) -> None:
+    work_with_markup = {
+        "id": "https://openalex.org/W999999",
+        "doi": "https://doi.org/10.1000/182",
+        "title": "Study [RCT] on [CO2] reduction [/B]",
+        "publication_year": 2024,
+        "type": "article",
+        "cited_by_count": 10,
+        "abstract_inverted_index": {
+            "Results": [0],
+            "[95%": [1],
+            "CI]": [2],
+            "show": [3],
+            "benefit": [4],
+            "[/B]": [5],
+        },
+    }
+    respx.get("https://api.openalex.org/works/W999999").mock(
+        return_value=Response(200, json=work_with_markup)
+    )
+
+    result = runner.invoke(app, ["openalex", "get", "W999999"])
+
+    assert result.exit_code == 0
+    assert "Study [RCT] on [CO2] reduction [/B]" in result.stdout
+    assert "[95% CI]" in result.stdout
+    assert "[/B]" in result.stdout

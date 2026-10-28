@@ -49,9 +49,10 @@ class OpenAlexHttpCache:
     def _resolve_dir(self) -> Path:
         target = self.cache_dir
         if not target.is_absolute():
-            # Racine du dépôt
-            root = Path(__file__).resolve().parents[4]
-            target = root / target
+            # Racine du dépôt (civic-tech/)
+            from csc.config import _PROJECT_ROOT
+
+            target = _PROJECT_ROOT / target
         target.mkdir(parents=True, exist_ok=True)
         return target
 
@@ -158,10 +159,17 @@ class OpenAlexHttpCache:
             credits_used=credits_used,
         )
 
+        tmp_path = path.with_suffix(".tmp")
         try:
-            path.write_text(cached.model_dump_json(indent=2), encoding="utf-8")
+            tmp_path.write_text(cached.model_dump_json(indent=2), encoding="utf-8")
+            tmp_path.replace(path)
         except Exception as exc:
             logger.warning("Impossible d'écrire l'entrée de cache OpenAlex : %s", exc)
+            if tmp_path.exists():
+                try:
+                    tmp_path.unlink()
+                except OSError:
+                    pass
 
     def clear(self) -> None:
         """Vide l'intégralité du cache disque."""

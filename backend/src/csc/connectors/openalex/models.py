@@ -82,12 +82,13 @@ def normalize_doi(doi: str | None) -> str | None:
 
 
 def normalize_openalex_id(openalex_id: str | None) -> str | None:
-    """Normalise un identifiant OpenAlex en ne conservant que l'ID court (ex: W12345)."""
+    """Normalise un identifiant OpenAlex en ne conservant que l'ID court (ex: W12345, T11636)."""
     if not openalex_id:
         return None
-    s = openalex_id.strip()
-    if "openalex.org/" in s:
-        s = s.split("openalex.org/")[-1]
+    s = openalex_id.strip().rstrip("/")
+    if not s:
+        return None
+    s = s.split("/")[-1]
     return s.strip() if s else None
 
 

@@ -57,6 +57,9 @@ def test_normalize_openalex_id() -> None:
     assert normalize_openalex_id("https://openalex.org/W2741809807") == "W2741809807"
     assert normalize_openalex_id("https://openalex.org/I136199984") == "I136199984"
     assert normalize_openalex_id("A5012345678") == "A5012345678"
+    assert normalize_openalex_id("https://openalex.org/topics/T11636") == "T11636"
+    assert normalize_openalex_id("https://api.openalex.org/works/W2741809807") == "W2741809807"
+    assert normalize_openalex_id("works/W2741809807") == "W2741809807"
     assert normalize_openalex_id(None) is None
     assert normalize_openalex_id("   ") is None
 

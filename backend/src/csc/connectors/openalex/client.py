@@ -61,6 +61,31 @@ class OpenAlexClient:
         self.max_retries = max_retries
         self.backoff_factor = backoff_factor
         self.recorded_queries: list[EvidenceQuery] = []
+        self._client: httpx.Client | None = None
+
+    def _get_http_client(self) -> httpx.Client:
+        """Fournit ou initialise une session HTTP réutilisable (Keep-Alive)."""
+        if self._client is None or self._client.is_closed:
+            self._client = httpx.Client(
+                transport=self.transport,
+                timeout=self.timeout,
+            )
+        return self._client
+
+    def close(self) -> None:
+        """Ferme la session HTTP sous-jacente."""
+        if self._client is not None and not self._client.is_closed:
+            self._client.close()
+
+    def __enter__(self) -> "OpenAlexClient":
+        return self
+
+    def __exit__(self, *args: Any) -> None:
+        self.close()
+
+    def clear_recorded_queries(self) -> None:
+        """Vide l'historique des requêtes enregistrées en mémoire."""
+        self.recorded_queries.clear()
 
     def _build_headers(self) -> dict[str, str]:
         headers = {"Accept": "application/json"}
@@ -109,6 +134,8 @@ class OpenAlexClient:
             queried_at=datetime.now(UTC),
             results_count=results_count,
         )
+        if len(self.recorded_queries) >= 1000:
+            self.recorded_queries.pop(0)
         self.recorded_queries.append(record)
 
         if session is not None and claim_id is not None:
@@ -183,13 +210,10 @@ class OpenAlexClient:
 
         # 5. Boucle d'exécution avec retries exponentiels
         last_exception: Exception | None = None
+        client = self._get_http_client()
         for attempt in range(self.max_retries + 1):
             try:
-                with httpx.Client(
-                    transport=self.transport,
-                    timeout=self.timeout,
-                ) as client:
-                    resp = client.get(full_url, params=call_params, headers=headers)
+                resp = client.get(full_url, params=call_params, headers=headers)
 
                 # Gestion des statuts
                 if resp.status_code == 200:
@@ -394,10 +418,11 @@ class OpenAlexClient:
     ) -> ScholarlyWork:
         """Récupère une publication spécifique à partir de son DOI ou de son ID OpenAlex."""
         clean_target = id_or_doi.strip()
+        target_lower = clean_target.lower()
         is_doi = (
-            clean_target.startswith("10.")
-            or "doi.org" in clean_target
-            or clean_target.startswith("doi:")
+            target_lower.startswith("10.")
+            or "doi.org" in target_lower
+            or target_lower.startswith("doi:")
         )
         if is_doi:
             doi = normalize_doi(clean_target)

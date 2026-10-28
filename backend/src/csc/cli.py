@@ -8,6 +8,7 @@ from pathlib import Path
 import typer
 from alembic.config import Config as AlembicConfig
 from rich.console import Console
+from rich.markup import escape
 from rich.table import Table
 
 from alembic import command as alembic_command
@@ -21,6 +22,7 @@ from csc.connectors.openalex import (
     get_default_client,
     get_work,
     search_works,
+    semantic_search_works,
     top_authors,
     top_institutions,
 )
@@ -368,6 +370,11 @@ def openalex_search_cmd(
         "--reviews-only",
         help="Restreindre aux revues systématiques et méta-analyses",
     ),
+    semantic: bool = typer.Option(
+        False,
+        "--semantic",
+        help="Effectuer une recherche sémantique par similarité conceptuelle",
+    ),
     sort: str = typer.Option(
         "cited_by_count:desc",
         "--sort",
@@ -382,13 +389,22 @@ def openalex_search_cmd(
     ),
 ) -> None:
     """Recherche des publications scientifiques dans OpenAlex."""
-    console.print(
-        f"[bold blue]Recherche OpenAlex :[/bold blue] {query} "
-        f"({'revues systématiques uniquement' if reviews_only else 'tous types'})"
+    mode_desc = (
+        "revues systématiques uniquement"
+        if reviews_only
+        else ("recherche sémantique" if semantic else "tous types")
     )
+    console.print(f"[bold blue]Recherche OpenAlex :[/bold blue] {escape(query)} ({mode_desc})")
 
     try:
-        if reviews_only:
+        if semantic:
+            filters = {"type": "review"} if reviews_only else None
+            works = semantic_search_works(
+                text=query,
+                filters=filters,
+                k=limit,
+            )
+        elif reviews_only:
             works = find_systematic_reviews(
                 topic_query=query,
                 sort=sort,
@@ -416,11 +432,11 @@ def openalex_search_cmd(
 
         for w in works:
             table.add_row(
-                w.title,
+                escape(w.title),
                 str(w.year or "-"),
                 str(w.cited_by_count),
                 "Oui" if w.is_systematic_review else "Non",
-                w.doi or w.openalex_id or "-",
+                escape(w.doi or w.openalex_id or "-"),
             )
 
         console.print(table)
@@ -442,24 +458,26 @@ def openalex_get_cmd(
     ),
 ) -> None:
     """Affiche les détails d'une publication scientifique spécifique."""
-    console.print(f"[bold blue]Consultation de la publication :[/bold blue] {id_or_doi}")
+    console.print(f"[bold blue]Consultation de la publication :[/bold blue] {escape(id_or_doi)}")
     try:
         w = get_work(id_or_doi)
-        console.print(f"[bold cyan]Titre :[/bold cyan] {w.title}")
+        console.print(f"[bold cyan]Titre :[/bold cyan] {escape(w.title)}")
         console.print(f"[bold magenta]Année :[/bold magenta] {w.year or '-'}")
-        console.print(f"[bold]Revue / Lieu :[/bold] {w.venue or '-'}")
+        console.print(f"[bold]Revue / Lieu :[/bold] {escape(w.venue or '-')}")
         console.print(f"[bold green]Citations :[/bold green] {w.cited_by_count}")
         is_rev = "Oui" if w.is_systematic_review else "Non"
         console.print(f"[bold yellow]Revue systématique :[/bold yellow] {is_rev}")
         if w.doi:
-            console.print(f"[dim]DOI : https://doi.org/{w.doi}[/dim]")
+            console.print(f"[dim]DOI : https://doi.org/{escape(w.doi)}[/dim]")
         if w.openalex_id:
-            console.print(f"[dim]OpenAlex : https://openalex.org/{w.openalex_id}[/dim]")
+            console.print(f"[dim]OpenAlex : https://openalex.org/{escape(w.openalex_id)}[/dim]")
         if w.authors:
-            console.print(f"[bold]Auteurs ({len(w.authors)}) :[/bold] {', '.join(w.authors)}")
+            console.print(
+                f"[bold]Auteurs ({len(w.authors)}) :[/bold] {escape(', '.join(w.authors))}"
+            )
         if w.abstract:
             console.print("\n[bold]Résumé :[/bold]")
-            console.print(w.abstract)
+            console.print(w.abstract, markup=False)
     except OpenAlexNotFoundError as exc:
         console.print(f"[bold red]✗ Publication introuvable :[/bold red] {exc}")
         raise typer.Exit(code=1) from exc
@@ -475,7 +493,7 @@ def openalex_institutions_cmd(
 ) -> None:
     """Affiche les institutions les plus influentes pour un topic OpenAlex."""
     console.print(
-        f"[bold blue]Top institutions pour le sujet :[/bold blue] {topic_id} (max {limit})"
+        f"[bold blue]Top institutions pour le sujet :[/bold blue] {escape(topic_id)} (max {limit})"
     )
     try:
         institutions = top_institutions(topic_id, n=limit)
@@ -493,12 +511,12 @@ def openalex_institutions_cmd(
 
         for inst in institutions:
             table.add_row(
-                inst.display_name,
-                inst.country_code or "-",
-                inst.type or "-",
+                escape(inst.display_name),
+                escape(inst.country_code or "-"),
+                escape(inst.type or "-"),
                 str(inst.cited_by_count),
                 str(inst.works_count),
-                inst.ror or inst.id,
+                escape(inst.ror or inst.id),
             )
         console.print(table)
     except OpenAlexError as exc:
@@ -512,7 +530,9 @@ def openalex_authors_cmd(
     limit: int = typer.Option(20, "--limit", "-n", help="Nombre d'auteurs à afficher"),
 ) -> None:
     """Affiche les auteurs de référence pour un topic OpenAlex (vivier de relecteurs)."""
-    console.print(f"[bold blue]Top auteurs pour le sujet :[/bold blue] {topic_id} (max {limit})")
+    console.print(
+        f"[bold blue]Top auteurs pour le sujet :[/bold blue] {escape(topic_id)} (max {limit})"
+    )
     try:
         authors = top_authors(topic_id, n=limit)
         if not authors:
@@ -528,11 +548,11 @@ def openalex_authors_cmd(
 
         for a in authors:
             table.add_row(
-                a.display_name,
-                a.last_known_institution or "-",
+                escape(a.display_name),
+                escape(a.last_known_institution or "-"),
                 str(a.cited_by_count),
                 str(a.works_count),
-                a.orcid or a.id,
+                escape(a.orcid or a.id),
             )
         console.print(table)
     except OpenAlexError as exc:
