@@ -1,0 +1,62 @@
+{
+  "response":{
+    "numFound":135,
+    "start":0,
+    "maxScore":11.778666,
+    "numFoundExact":true,
+    "docs":[{
+      "title_s":["Fallait-il appliquer la taxe carbone aux carburants routiers ?"],
+      "abstract_s":["La forte fiscalité qui frappe les carburant routiers en France et dans plusieurs pays d'Europe justifierait que ceux-ci soient exemptés de la taxe carbone. En effet, contrairement aux autres taxes internalisantes, la taxe carbone appliquée aux carburants consommés par les ménages a un coût économique supérieur au bénéfice attendu en matière de réduction des émissions. Elle a aussi pour effet d'accentuer le caractère régressif de la taxe intérieure sur les produits pétroliers (TIPP) en frappant plus lourdement les ménages les plus pauvres. Faut-il appliquer la taxe carbone aux carburants routiers ? À notre avis, oui, mais de façon symbolique, c'est à dire en réduisant d'autant la TIPP sur les carburants. C'est la politique qui a été mise en œuvre en Suède, où le poids de la taxe carbone dans le prix d'un litre de carburant a été fixé à une trentaine de centimes sans en affecter le prix parce que les taxes spécifiques qui frappaient les carburants ont été réduites en conséquence lors de l'instauration de la taxe carbone."],
+      "journalTitle_s":"Flux - Cahiers scientifiques internationaux Réseaux et territoires",
+      "authFullName_s":["Richard Darbéra"],
+      "structName_s":["Réseaux, Institutions, Territoires (RIT)","Laboratoire Techniques, Territoires et Sociétés","Université Paris-Est Marne-la-Vallée","École nationale des ponts et chaussées","Centre National de la Recherche Scientifique"],
+      "halId_s":"halshs-00557065",
+      "uri_s":"https://shs.hal.science/halshs-00557065v1",
+      "docType_s":"ART",
+      "producedDateY_i":2010,
+      "fileMain_s":"https://shs.hal.science/halshs-00557065/document"
+    },{
+      "title_s":["Taxe(s) carbone : et maintenant ?"],
+      "abstract_s":["La décision projet de taxe carbone peut du Conseil constitutionnel censurant le difficilement être considérée comme une bonne nouvelle. Le risque est en effet grand qu'elle ne conduise in fine à une plus mauvaise loi que celle qui fut soumise à son examen. Nous tentons dans cette lettre d'imaginer une nouvelle taxe carbone sous cette contrainte juridique en procédant à une analyse économique de la décision du Conseil et de ses motivations, avant de préciser la nature des difficultés, principalement en termes de compétitivité, qui constituent la justification des différents traitements dérogatoires qui n'ont pas tous été remis en cause. Le gouvernement ayant en outre fait part de son intention d'instituer une \" taxe carbone aux frontières de l'Union européenne \", nous en envisageons finalement les enjeux et les différentes modalités."],
+      "journalTitle_s":"Lettre de l'OFCE",
+      "authFullName_s":["Eloi Laurent","Jacques Le Cacheux"],
+      "structName_s":["Observatoire français des conjonctures économiques (Sciences Po)","Sciences Po"],
+      "halId_s":"hal-01023823",
+      "uri_s":"https://sciencespo.hal.science/hal-01023823v1",
+      "docType_s":"ART",
+      "producedDateY_i":2010,
+      "fileMain_s":"https://sciencespo.hal.science/hal-01023823/document"
+    },{
+      "title_s":["Débat : La taxe carbone, un outil en trompe-l’œil","Debate: carbon tax, an optical illusion"],
+      "abstract_s":["Le climat se réchauffe et se dérègle : il faut agir. Sur The Conversation France, Christian de Perthuis, spécialiste de la question, s’est récemment réjouit de l’introduction en France depuis 2014 de la taxe carbone et de sa hausse progressive. Se référant à la « valeur Quinet » (environ 90 euros), l’auteur laisse entendre que l’atteinte de ce prix « garantirait » la division par quatre des émissions de gaz à effet de serre, dont l’accumulation dans l’atmosphère perturbe l’équilibre climatique. La France serait ainsi en bonne voie et ferait même partie d’un « club restreint » de bons élèves. La Suède, avec sa taxe carbone à 110 euros, est citée comme exemple. Les inégalités en matière d’accès à l’énergie seraient compensées par un chèque précarité. Seul point noir au tableau, l’impopularité de la taxe carbone. [...]","The climate is warming and changing: we must act. On the French version of the website The Conversation, climate change specialist Christian de Perthuis recently applauded the introduction of the carbon tax in France in 2014 and its gradual increase. Referring to the “Quinet value” (around 90 euros), the author suggests that reaching this price would “guarantee” that greenhouse gas emissions would decrease four-fold. When they accumulate in the atmosphere, these emissions disrupt the climate’s balance. France therefore would appear to be on the right path, seemingly part of the “narrow circle” of model students. Sweden, with its carbon tax of 110 euros, is cited as an example. Inequalities in terms of access to energy are offset by the energy voucher benefit. There’s only one hitch: the carbon tax is very unpopular. [...]"],
+      "journalTitle_s":"The Conversation France",
+      "authFullName_s":["Fabrice Flipo"],
+      "structName_s":["Département Langues et Sciences Humaines","Télécom Ecole de Management","Institut Mines-Télécom Business School","Institut Mines-Télécom [Paris]","Laboratoire de Changement Social et Politique","Université Paris Cité"],
+      "halId_s":"hal-04069164",
+      "uri_s":"https://hal.science/hal-04069164v1",
+      "docType_s":"ART",
+      "producedDateY_i":2018
+    },{
+      "title_s":["Pilotage stratégique de la taxe carbone par les entreprises : les enjeux de la performance globale"],
+      "abstract_s":["Cette recherche s’intéresse à l’opinion des individus, concernant le pilotage stratégique de la taxe carbone par les entreprises, en fonction des facteurs de justice sociale. Pour cela elle applique une technique empruntée aux sciences cognitives. Elle aboutit à deux clusters. Le premier regroupe des individus qui jugent acceptable la combinaison des trois choix de gestion de la taxe carbone suivants : augmentation des prix, investissements « low carbon » et absence de délocalisation, conformément aux justices distributive et rétributive. Les membres du second cluster quant à eux, jugent acceptable tout choix de gestion de la taxe carbone qui autorise le maintien des prix selon la justice réparatrice. Ces résultats sont à considérer dans la définition des stratégies RSE et dans la recherche d’un équilibre des différentes composantes de la performance globale."],
+      "journalTitle_s":"Revue management & avenir",
+      "authFullName_s":["Marco Heimann","Katia Lobre-Lebraty"],
+      "structName_s":["Université Jean Moulin - Lyon 3","Université de Lyon","Laboratoire de Recherche Magellan","Université Jean Moulin - Lyon 3","Université de Lyon","Institut d'Administration des Entreprises (IAE) - Lyon"],
+      "halId_s":"halshs-03386384",
+      "uri_s":"https://shs.hal.science/halshs-03386384v1",
+      "docType_s":"ART",
+      "doiId_s":"10.3917/mav.124.0151",
+      "producedDateY_i":2021
+    },{
+      "title_s":["Inégalité intergénérationnelle et recyclage d’une taxe carbone"],
+      "abstract_s":["Cet article analyse les effets redistributifs intergénérationnels du recyclage d’une taxe carbone et leur influence sur le choix public quant aux modalités de recyclage de cette taxe. Nous utilisons un modèle à générations imbriquées paramétré sur données réelles. Nous considérons deux scénarios de réforme, selon que la taxe carbone est recyclée par des dépenses publiques plus élevées ou des impôts directs moins élevés – impliquant alors un « deuxième dividende » pour la croissance. Une taxe carbone recyclée par des impôts plus faibles pèse sur le bien-être intertemporel des baby-boomers mais est plus favorable aux jeunes et aux cohortes futures. Surtout, un planificateur social peut recycler une taxe sur le carbone en augmentant les dépenses plutôt qu’en réduisant les impôts si son aversion pour l’inégalité intergénérationnelle est suffisamment élevée."],
+      "journalTitle_s":"Revue économique",
+      "authFullName_s":["Frédéric Gonand"],
+      "structName_s":["Chaire économie du climat","Chaire économie du climat","Savoirs et Pratiques du Moyen Âge à l'époque contemporaine (SAPRAT - EA 4116)","École Pratique des Hautes Études","Université Paris Sciences et Lettres","Laboratoire d'Economie de Dauphine","Institut de Recherche pour le Développement","Université Paris Dauphine-PSL","Université Paris Sciences et Lettres","Centre National de la Recherche Scientifique"],
+      "halId_s":"hal-04488519",
+      "uri_s":"https://hal.science/hal-04488519v1",
+      "docType_s":"ART",
+      "producedDateY_i":2019
+    }]
+  }
+}

@@ -13,6 +13,22 @@ from rich.table import Table
 
 from alembic import command as alembic_command
 from csc.config import settings
+from csc.connectors.hal import (
+    KNOWN_STRUCTURES,
+    HalError,
+    HalNotFoundError,
+    HalRateLimitError,
+    resolve_struct_id,
+)
+from csc.connectors.hal import (
+    get as get_hal_work,
+)
+from csc.connectors.hal import (
+    search as search_hal_works,
+)
+from csc.connectors.hal import (
+    search_by_structure as search_hal_by_structure,
+)
 from csc.connectors.openalex import (
     OpenAlexBudgetExceededError,
     OpenAlexError,
@@ -596,7 +612,233 @@ def openalex_budget_cmd() -> None:
 
 
 # L05 Connecteur HAL
-_register_placeholder("hal", "Connecteur API HAL Solr (L05)", "Lot L05")
+hal_app = typer.Typer(
+    help="Connecteur API HAL Solr pour l'archive ouverte française (L05).",
+    no_args_is_help=True,
+)
+app.add_typer(hal_app, name="hal")
+
+
+@hal_app.command(name="search")
+def hal_search_cmd(
+    query: str = typer.Argument("", help="Termes de recherche ou expression"),
+    doc_types: str = typer.Option(
+        "ART,REPORT,THESE,COUV",
+        "--doc-types",
+        "-t",
+        help="Types de documents séparés par des virgules (ART, REPORT, THESE, COUV...)",
+    ),
+    since_year: int = typer.Option(
+        2005,
+        "--since-year",
+        "-y",
+        help="Année minimale de publication",
+    ),
+    proximity: str | None = typer.Option(
+        None,
+        "--proximity",
+        "-p",
+        help="Clause de proximité au format 'mot1,mot2,distance' (ex: 'taxe,carbone,3')",
+    ),
+    limit: int = typer.Option(
+        10,
+        "--limit",
+        "-n",
+        help="Nombre maximal de résultats affichés",
+    ),
+) -> None:
+    """Recherche des publications scientifiques dans HAL."""
+    prox_tuple: tuple[str, str, int] | None = None
+    if proximity:
+        parts = [p.strip() for p in proximity.split(",") if p.strip()]
+        if len(parts) == 3 and parts[2].isdigit():
+            prox_tuple = (parts[0], parts[1], int(parts[2]))
+        else:
+            console.print(
+                "[bold red]Format de proximité invalide.[/bold red] "
+                "Attendu : 'mot1,mot2,distance' (ex: 'taxe,carbone,3')"
+            )
+            raise typer.Exit(code=1)
+
+    types_tuple = tuple(d.strip() for d in doc_types.split(",") if d.strip())
+    console.print(
+        f"[bold blue]Recherche HAL :[/bold blue] query='{escape(query)}' | "
+        f"types={types_tuple} | depuis={since_year}"
+        + (f" | proximité={prox_tuple}" if prox_tuple else "")
+    )
+
+    try:
+        works = search_hal_works(
+            query=query,
+            doc_types=types_tuple,
+            since_year=since_year,
+            proximity=prox_tuple,
+            rows=limit,
+        )
+
+        if not works:
+            console.print("[yellow]Aucune publication trouvée dans HAL.[/yellow]")
+            return
+
+        table = Table(title=f"Résultats HAL ({len(works)} publications)")
+        table.add_column("Titre", style="bold cyan", no_wrap=False)
+        table.add_column("Année", style="magenta", justify="center")
+        table.add_column("Revue / Structure", style="yellow", no_wrap=False)
+        table.add_column("Identifiant HAL", style="green")
+        table.add_column("DOI", style="dim", no_wrap=False)
+
+        for w in works:
+            table.add_row(
+                escape(w.title),
+                str(w.year or "-"),
+                escape(w.venue or "-"),
+                escape(w.hal_id or "-"),
+                escape(w.doi or "-"),
+            )
+
+        console.print(table)
+    except HalRateLimitError as exc:
+        console.print(f"[bold red]✗ Limite de débit HAL atteinte :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+    except HalError as exc:
+        console.print(f"[bold red]✗ Erreur HAL :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@hal_app.command(name="structure")
+def hal_structure_cmd(
+    structure: str = typer.Argument(
+        ...,
+        help="Acronyme (ex: IPP, OFCE, INRAE, LIEPP) ou identifiant numérique AuréHAL",
+    ),
+    query: str = typer.Option(
+        "*:*",
+        "--query",
+        "-q",
+        help="Termes de recherche au sein de la structure",
+    ),
+    doc_types: str = typer.Option(
+        "ART,REPORT,THESE,COUV",
+        "--doc-types",
+        "-t",
+        help="Types de documents séparés par des virgules",
+    ),
+    since_year: int = typer.Option(
+        2005,
+        "--since-year",
+        "-y",
+        help="Année minimale de publication",
+    ),
+    limit: int = typer.Option(
+        10,
+        "--limit",
+        "-n",
+        help="Nombre maximal de résultats affichés",
+    ),
+) -> None:
+    """Recherche des publications affiliées à une structure de recherche spécifique."""
+    try:
+        struct_id = resolve_struct_id(structure)
+    except ValueError as exc:
+        console.print(f"[bold red]✗ Structure invalide :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+    types_tuple = tuple(d.strip() for d in doc_types.split(",") if d.strip())
+    console.print(
+        f"[bold blue]Recherche HAL par structure :[/bold blue] {escape(structure)} "
+        f"(ID {struct_id}) | query='{escape(query)}' | depuis={since_year}"
+    )
+
+    try:
+        works = search_hal_by_structure(
+            struct_ids=[struct_id],
+            query=query,
+            doc_types=types_tuple,
+            since_year=since_year,
+            rows=limit,
+        )
+
+        if not works:
+            console.print("[yellow]Aucune publication trouvée pour cette structure.[/yellow]")
+            return
+
+        table = Table(title=f"Publications {structure} (ID {struct_id}) — {len(works)} résultats")
+        table.add_column("Titre", style="bold cyan", no_wrap=False)
+        table.add_column("Année", style="magenta", justify="center")
+        table.add_column("Auteurs", style="dim", no_wrap=False)
+        table.add_column("Identifiant HAL", style="green")
+        table.add_column("DOI", style="dim", no_wrap=False)
+
+        for w in works:
+            authors_str = ", ".join(w.authors[:2]) + ("..." if len(w.authors) > 2 else "")
+            table.add_row(
+                escape(w.title),
+                str(w.year or "-"),
+                escape(authors_str or "-"),
+                escape(w.hal_id or "-"),
+                escape(w.doi or "-"),
+            )
+
+        console.print(table)
+    except HalError as exc:
+        console.print(f"[bold red]✗ Erreur HAL :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@hal_app.command(name="get")
+def hal_get_cmd(
+    hal_id: str = typer.Argument(
+        ...,
+        help="Identifiant HAL (ex: halshs-00557065) ou URL de dépôt",
+    ),
+) -> None:
+    """Affiche les détails complets d'une publication HAL."""
+    console.print(f"[bold blue]Consultation de la publication HAL :[/bold blue] {escape(hal_id)}")
+    try:
+        w = get_hal_work(hal_id)
+        console.print(f"[bold cyan]Titre :[/bold cyan] {escape(w.title)}")
+        console.print(f"[bold magenta]Année :[/bold magenta] {w.year or '-'}")
+        console.print(f"[bold]Revue / Structure :[/bold] {escape(w.venue or '-')}")
+        if w.hal_id:
+            console.print(f"[bold green]HAL ID :[/bold green] {escape(w.hal_id)}")
+        if w.doi:
+            console.print(f"[dim]DOI : https://doi.org/{escape(w.doi)}[/dim]")
+        if w.url:
+            console.print(f"[dim]Accès : {escape(w.url)}[/dim]")
+        if w.authors:
+            console.print(
+                f"[bold]Auteurs ({len(w.authors)}) :[/bold] {escape(', '.join(w.authors))}"
+            )
+        if w.abstract:
+            console.print("\n[bold]Résumé :[/bold]")
+            console.print(w.abstract, markup=False)
+    except HalNotFoundError as exc:
+        console.print(f"[bold red]✗ Publication introuvable :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+    except HalError as exc:
+        console.print(f"[bold red]✗ Erreur HAL :[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@hal_app.command(name="structures")
+def hal_structures_cmd() -> None:
+    """Liste les structures de recherche françaises répertoriées avec leurs identifiants AuréHAL."""
+    table = Table(title="Référentiel des structures de recherche utiles (AuréHAL)")
+    table.add_column("Acronyme", style="bold cyan")
+    table.add_column("structId_i", style="bold green", justify="right")
+    table.add_column("Intitulé officiel", style="bold")
+    table.add_column("Description / Domaine", style="dim", no_wrap=False)
+
+    for acronym, struct in KNOWN_STRUCTURES.items():
+        table.add_row(
+            acronym,
+            str(struct.id),
+            escape(struct.name),
+            escape(struct.description),
+        )
+
+    console.print(table)
+
 
 # L06 Connecteur Semantic Scholar
 _register_placeholder("s2", "Connecteur Semantic Scholar (L06)", "Lot L06")
