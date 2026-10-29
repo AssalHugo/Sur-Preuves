@@ -63,6 +63,7 @@ def test_search_nominal_and_proximity_acceptance(
     assert query_record.source == "hal"
     assert query_record.results_count == 5
     assert query_record.parameters.get("cached") is False
+    assert query_record.parameters.get("num_found") == 135
 
 
 @respx.mock
@@ -136,6 +137,24 @@ def test_retry_on_429_success(
     route = respx.get("https://api.archives-ouvertes.fr/search").mock(
         side_effect=[
             Response(429, headers={"retry-after": "0.01"}),
+            Response(200, json=cassette),
+        ]
+    )
+
+    work = mock_hal_client.get("halshs-03386384")
+    assert work.hal_id == "halshs-03386384"
+    assert route.call_count == 2
+
+
+@respx.mock
+def test_retry_on_429_with_rfc_date_header(
+    mock_hal_client: HalClient,
+    load_hal_cassette: Any,
+) -> None:
+    cassette = load_hal_cassette("single_work_with_doi")
+    route = respx.get("https://api.archives-ouvertes.fr/search").mock(
+        side_effect=[
+            Response(429, headers={"retry-after": "Wed, 21 Oct 2026 07:28:00 GMT"}),
             Response(200, json=cassette),
         ]
     )
@@ -237,3 +256,22 @@ def test_evidence_query_database_persistence(
 def test_client_context_manager() -> None:
     with HalClient() as client:
         assert client is not None
+
+
+def test_clear_recorded_queries(mock_hal_client: HalClient) -> None:
+    mock_hal_client.recorded_queries.append(MagicMock())
+    assert len(mock_hal_client.recorded_queries) == 1
+    mock_hal_client.clear_recorded_queries()
+    assert len(mock_hal_client.recorded_queries) == 0
+
+
+@respx.mock
+def test_search_with_none_query(mock_hal_client: HalClient, load_hal_cassette: Any) -> None:
+    cassette = load_hal_cassette("search_proximity")
+    respx.get("https://api.archives-ouvertes.fr/search").mock(
+        return_value=Response(200, json=cassette)
+    )
+
+    # Doit fonctionner sans lever d'AttributeError sur None
+    works = mock_hal_client.search(query=None, rows=5)  # type: ignore[arg-type]
+    assert len(works) == 5

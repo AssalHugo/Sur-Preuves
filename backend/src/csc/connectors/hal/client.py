@@ -1,6 +1,7 @@
 """Client HTTP pour l'API Solr de l'archive ouverte HAL (CCSD/CNRS)."""
 
 import logging
+import re
 import time
 from collections.abc import Sequence
 from datetime import UTC, datetime
@@ -62,6 +63,10 @@ class HalClient:
     def close(self) -> None:
         """Ferme la session HTTP sous-jacente."""
         self._http_client.close()
+
+    def clear_recorded_queries(self) -> None:
+        """Vide l'historique en mémoire des requêtes de traçabilité."""
+        self.recorded_queries.clear()
 
     def __enter__(self) -> "HalClient":
         return self
@@ -128,11 +133,15 @@ class HalClient:
         if cached_resp is not None:
             data = cached_resp.data
             count = 0
+            num_found: int | None = None
             if isinstance(data, dict):
                 resp_obj = data.get("response")
                 if isinstance(resp_obj, dict):
                     docs = resp_obj.get("docs")
                     count = len(docs) if isinstance(docs, list) else 0
+                    raw_num_found = resp_obj.get("numFound")
+                    if isinstance(raw_num_found, int):
+                        num_found = raw_num_found
 
             self._record_evidence_query(
                 exact_query=exact_query_desc or normalized_url,
@@ -140,6 +149,7 @@ class HalClient:
                     "url": normalized_url,
                     "params": params,
                     "cached": True,
+                    "num_found": num_found,
                 },
                 results_count=count,
                 claim_id=claim_id,
@@ -160,11 +170,15 @@ class HalClient:
                         ) from json_err
 
                     count = 0
+                    num_found = None
                     if isinstance(data, dict):
                         resp_obj = data.get("response")
                         if isinstance(resp_obj, dict):
                             docs = resp_obj.get("docs")
                             count = len(docs) if isinstance(docs, list) else 0
+                            raw_num_found = resp_obj.get("numFound")
+                            if isinstance(raw_num_found, int):
+                                num_found = raw_num_found
 
                     # Mise en cache
                     self.cache.set(
@@ -181,6 +195,7 @@ class HalClient:
                             "url": normalized_url,
                             "params": params,
                             "cached": False,
+                            "num_found": num_found,
                         },
                         results_count=count,
                         claim_id=claim_id,
@@ -196,11 +211,12 @@ class HalClient:
                 if resp.status_code == 429:
                     if attempt < self.max_retries:
                         retry_after = resp.headers.get("retry-after")
-                        wait_seconds = (
-                            float(retry_after)
-                            if retry_after
-                            else self.backoff_factor * (2**attempt)
-                        )
+                        wait_seconds = self.backoff_factor * (2**attempt)
+                        if retry_after:
+                            try:
+                                wait_seconds = float(retry_after)
+                            except (ValueError, TypeError):
+                                pass
                         time.sleep(min(wait_seconds, 10.0))
                         continue
                     raise HalRateLimitError(
@@ -245,18 +261,18 @@ class HalClient:
     ) -> list[ScholarlyWork]:
         """Recherche des publications dans HAL selon divers filtres et critères de proximité."""
         # 1. Construction de la requête principale q
+        clean_q = (query or "").strip()
         if proximity is not None:
             t1, t2, dist = proximity
             prox_clause = build_proximity_query(t1, t2, dist)
-            clean_q = query.strip()
+            normalized_terms = f"{t1.strip().lower()} {t2.strip().lower()}"
             if not clean_q or clean_q in ("*", "*:*"):
                 solr_q = prox_clause
-            elif clean_q.strip('"').lower() == f"{t1.strip().lower()} {t2.strip().lower()}":
+            elif re.sub(r"\s+", " ", clean_q.strip('"')).lower() == normalized_terms:
                 solr_q = prox_clause
             else:
                 solr_q = f"({clean_q}) AND {prox_clause}"
         else:
-            clean_q = query.strip()
             solr_q = clean_q if clean_q and clean_q not in ("*", "") else "*:*"
 
         # 2. Construction des filtres fq

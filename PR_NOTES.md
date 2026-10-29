@@ -25,14 +25,14 @@ Le lot L05 met en place le connecteur vers l'archive ouverte nationale **HAL** (
 Les fichiers ont été créés dans le respect strict du découpage autorisé (`backend/src/csc/connectors/hal/` et `backend/tests/connectors/hal/`) :
 
 ### A. Modèles et Utilitaires (`csc.connectors.hal.models`)
-- Modèle `ResearchStructure` : `id`, `acronym`, `name`, `description`.
-- Dictionnaire `KNOWN_STRUCTURES` et fonction `resolve_struct_id(struct_input)` permettant d'utiliser indistinctement l'acronyme (`"IPP"`, `"OFCE"`, `"INRAE"`) ou l'identifiant numérique (`266522`, `250936`, `577435`).
+- Modèle `ResearchStructure` : `id`, `acronym`, `name`, `description`, `aliases`.
+- Dictionnaire `KNOWN_STRUCTURES` et fonction `resolve_struct_id(struct_input)` permettant d'utiliser indistinctement l'acronyme (`"IPP"`, `"OFCE"`, `"INRAE"`), les alias secondaires (`"INSHS"`, `"INRA"`) ou l'identifiant numérique (`266522`, `250936`, `577435`).
 - Fonctions de normalisation et d'échappement :
   - `build_proximity_query(term1, term2, distance)` : produit `'"mot1 mot2"~N'` avec échappement des caractères spéciaux (`\`, `"`).
   - `escape_solr_phrase_term(term)` : sécurise l'inclusion de termes dans les expressions Solr.
   - `normalize_doi(doi)` : supprime les préfixes d'URL (`https://doi.org/`, `doi:`) et force les minuscules.
-  - `normalize_hal_id(hal_id)` : extrait l'identifiant court sans préfixe URL ni suffixe de version (`v1`, `v2`).
-  - `parse_hal_doc(doc)` : transforme un document Solr brut en instance conforme du contrat immuable `ScholarlyWork`.
+  - `normalize_hal_id(hal_id)` : extrait l'identifiant court sans préfixe URL ni suffixe de version (`v1`, `v2`), gère les URLs avec sous-chemins (`/document`, `/file/...`) et garantit la mise en minuscules pour la sensibilité à la casse Solr.
+  - `parse_hal_doc(doc)` : transforme un document Solr brut en instance conforme du contrat immuable `ScholarlyWork`, avec détection bilingue (français et anglais) des revues systématiques et méta-analyses dans le titre et l'abstract.
 
 ### B. Cache HTTP Persistant sur Disque (`csc.connectors.hal.cache`)
 - `HalHttpCache` :
@@ -40,7 +40,7 @@ Les fichiers ont été créés dans le respect strict du découpage autorisé (`
   - Résolution de chemin relative à la racine du dépôt `_PROJECT_ROOT / var/cache/hal/`.
   - Durée de vie par défaut de 30 jours (2 592 000 s).
   - Écriture atomique sur disque (`.tmp` puis `replace`).
-  - Méthode `clear()` pour purger le cache.
+  - Méthode `clear()` pour purger le cache (fichiers `.json` et fichiers temporaires orphelins `.tmp`).
 
 ### C. Client HAL Solr & Fonctions Exposées (`csc.connectors.hal.client`, `csc.connectors.hal`)
 Fonctions exposées conformément à la spécification :
@@ -52,7 +52,9 @@ get(hal_id: str) -> ScholarlyWork
 ```
 - Support d'un client singleton par défaut via `get_default_client()`.
 - Gestion des sessions Keep-Alive via `httpx.Client`, avec support context manager et méthode `close()`.
-- Bornage mémoire de la traçabilité des requêtes (`recorded_queries`, max 1000).
+- Bornage mémoire de la traçabilité des requêtes (`recorded_queries`, max 1000) et méthode `clear_recorded_queries()`.
+- Traçabilité enrichie avec le volume total de documents Solr identifiés (`num_found`) dans les paramètres `EvidenceQuery`.
+- Gestion résiliente des retries 429 et 5xx avec parsing tolérant du header HTTP `Retry-After` (secondes ou dates RFC).
 
 ### D. Commandes CLI Typer (`backend/src/csc/cli.py`)
 - `csc hal search "<query>" [--proximity "mot1,mot2,distance"] [--doc-types ...] [--since-year ...] [--limit N]` : recherche avec tableau Rich des résultats.
@@ -82,16 +84,16 @@ La cible **`make check` est 100 % verte**, sans avertissement ni contournement :
 2. **Linting Python (`ruff check`)** : 0 erreur, 0 avertissement.
 3. **Typage statique strict (`mypy --strict`)** : **0 erreur sur 78 fichiers source**.
 4. **Tests Python (`pytest`)** :
-   - **179 tests passés avec succès** (2 ignorés réservés aux tests live API Gemini).
-   - **33 tests dédiés** au connecteur HAL :
+   - **183 tests passés avec succès** (2 ignorés réservés aux tests live API Gemini).
+   - **37 tests dédiés** au connecteur HAL :
      - Échappement et construction de requêtes de proximité (`test_models.py`).
-     - Normalisation des identifiants HAL et des DOI (`test_models.py`).
-     - Résolution des structures AuréHAL (`test_models.py`).
-     - Parsing complet des métadonnées, abstracts multilingues et types de documents (`test_models.py`).
-     - Normalisation d'URL, cache hit/miss et expiration TTL (`test_cache.py`).
+     - Normalisation des identifiants HAL (casse, URLs avec document/file/paramètres) et des DOI (`test_models.py`).
+     - Résolution des structures AuréHAL et alias (`test_models.py`).
+     - Parsing complet des métadonnées, abstracts multilingues, détection des revues systématiques en français (`test_models.py`).
+     - Normalisation d'URL, cache hit/miss, expiration TTL et purge (`test_cache.py`).
      - Recherche de proximité et filtres temporels sur cassette (`test_client.py`).
      - Recherche par structure affiliée (`test_client.py`).
-     - Retries sur 429 et 500 (`test_client.py`).
-     - Traçabilité et persistance `EvidenceQuery` (`test_client.py`).
+     - Retries sur 429 (secondes et dates RFC) et 500 (`test_client.py`).
+     - Traçabilité `EvidenceQuery` avec conservation de `num_found` et persistance SQL (`test_client.py`).
      - Commandes CLI `csc hal search`, `structure`, `get`, `structures` (`test_cli.py`).
 5. **Compilation Web Astro (`npm run check` & `npm run build`)** : 0 erreur, génération statique réussie.

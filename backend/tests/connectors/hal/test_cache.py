@@ -82,7 +82,11 @@ def test_cache_clear(tmp_path: Path) -> None:
         headers={},
         data={},
     )
+    # Créer un fichier temporaire orphelin
+    tmp_file = tmp_path / "cache" / "orphan.tmp"
+    tmp_file.write_text("temporary")
 
     cleared = cache.clear()
     assert cleared == 2
+    assert not tmp_file.exists()
     assert cache.clear() == 0

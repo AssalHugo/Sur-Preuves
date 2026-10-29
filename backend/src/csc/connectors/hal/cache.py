@@ -152,10 +152,12 @@ class HalHttpCache:
         count = 0
         cache_dir = self._resolve_dir()
         if cache_dir.exists():
-            for item in cache_dir.glob("*.json"):
-                try:
-                    item.unlink()
-                    count += 1
-                except OSError:
-                    pass
+            for pattern in ("*.json", "*.tmp"):
+                for item in cache_dir.glob(pattern):
+                    try:
+                        item.unlink()
+                        if pattern == "*.json":
+                            count += 1
+                    except OSError:
+                        pass
         return count

@@ -48,8 +48,15 @@ def test_normalize_doi_cases() -> None:
 
 def test_normalize_hal_id_cases() -> None:
     assert normalize_hal_id("halshs-00557065v1") == "halshs-00557065"
+    assert normalize_hal_id("HALSHS-00557065V1") == "halshs-00557065"
     assert normalize_hal_id("https://shs.hal.science/halshs-00557065v2") == "halshs-00557065"
     assert normalize_hal_id("https://hal.science/hal-03707816/") == "hal-03707816"
+    assert normalize_hal_id("https://hal.science/hal-03707816/document") == "hal-03707816"
+    assert (
+        normalize_hal_id("https://shs.hal.science/halshs-00557065v1/file/article.pdf")
+        == "halshs-00557065"
+    )
+    assert normalize_hal_id("https://hal.science/hal-03707816?fbclid=xyz#section") == "hal-03707816"
     assert normalize_hal_id("tel-00984266v1") == "tel-00984266"
     assert normalize_hal_id(["hal-01234567v3"]) == "hal-01234567"
     assert normalize_hal_id([]) is None
@@ -66,7 +73,10 @@ def test_resolve_struct_id_cases() -> None:
     assert resolve_struct_id("ipp") == 266522
     assert resolve_struct_id("OFCE") == 250936
     assert resolve_struct_id("INRAE") == 577435
+    assert resolve_struct_id("inra") == 577435
     assert resolve_struct_id("CNRS-SHS") == 84039
+    assert resolve_struct_id("INSHS") == 84039
+    assert resolve_struct_id("inshs-cnrs") == 84039
     assert resolve_struct_id("LIEPP") == 218465
     assert resolve_struct_id(266522) == 266522
     assert resolve_struct_id("266522") == 266522
@@ -131,6 +141,24 @@ def test_parse_hal_doc_multilingual_abstract_and_systematic_review() -> None:
     assert "This document provides a systematic review and meta-analysis." in work.abstract
     assert work.year == 2023
     assert work.venue == "Journal of Environmental Economics"
+
+
+def test_parse_hal_doc_french_systematic_review_in_abstract_only() -> None:
+    raw_doc = {
+        "halId_s": "hal-08888888",
+        "title_s": "Évaluation quantitative des politiques énergétiques en France",
+        "abstract_s": (
+            "Cet article présente une revue systématique "
+            "de la littérature économique sur la décarbonation."
+        ),
+        "authFullName_s": ["Claire Dubois"],
+        "docType_s": "ART",
+        "producedDateY_i": 2022,
+    }
+
+    work = parse_hal_doc(raw_doc)
+    assert work.title == "Évaluation quantitative des politiques énergétiques en France"
+    assert work.is_systematic_review is True
 
 
 def test_parse_hal_doc_these_and_report_fallbacks() -> None:

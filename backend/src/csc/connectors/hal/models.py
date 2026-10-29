@@ -16,6 +16,7 @@ class ResearchStructure:
     acronym: str
     name: str
     description: str
+    aliases: tuple[str, ...] = ()
 
 
 KNOWN_STRUCTURES: dict[str, ResearchStructure] = {
@@ -24,12 +25,14 @@ KNOWN_STRUCTURES: dict[str, ResearchStructure] = {
         acronym="INRAE",
         name="Institut National de Recherche pour l’Agriculture, l’Alimentation et l’Environnement",
         description="Recherche agronomique, alimentation, biodiversité, forêts et environnement",
+        aliases=("INRA", "IRSTEA"),
     ),
     "IPP": ResearchStructure(
         id=266522,
         acronym="IPP",
         name="Institut des Politiques Publiques",
         description="Évaluation quantitative et analyse des politiques publiques (PSE/GENES)",
+        aliases=("INSTITUT-DES-POLITIQUES-PUBLIQUES",),
     ),
     "OFCE": ResearchStructure(
         id=250936,
@@ -42,6 +45,7 @@ KNOWN_STRUCTURES: dict[str, ResearchStructure] = {
         acronym="INSHS-CNRS",
         name="Institut des Sciences Humaines et Sociales - CNRS Sciences humaines et sociales",
         description="Recherche en sciences humaines et sociales du CNRS",
+        aliases=("INSHS", "INSHS-CNRS", "CNRS-INSHS"),
     ),
     "LIEPP": ResearchStructure(
         id=218465,
@@ -54,6 +58,7 @@ KNOWN_STRUCTURES: dict[str, ResearchStructure] = {
         acronym="PSE",
         name="Paris School of Economics - École d'économie de Paris",
         description="Recherche économique fondamentale et appliquée",
+        aliases=("PARIS-SCHOOL-OF-ECONOMICS",),
     ),
     "CEPII": ResearchStructure(
         id=110493,
@@ -71,7 +76,7 @@ KNOWN_STRUCTURES: dict[str, ResearchStructure] = {
 
 
 def resolve_struct_id(struct_input: str | int) -> int:
-    """Résout un identifiant de structure à partir d'un entier ou d'un acronyme connu."""
+    """Résout un identifiant de structure à partir d'un entier, d'un acronyme ou d'un alias."""
     if isinstance(struct_input, int):
         return struct_input
 
@@ -83,11 +88,16 @@ def resolve_struct_id(struct_input: str | int) -> int:
     if key in KNOWN_STRUCTURES:
         return KNOWN_STRUCTURES[key].id
 
-    # Recherche tolérante sur les clés avec tirets normalisés
+    # Recherche tolérante sur les clés, acronymes et alias avec tirets normalisés
     normalized_key = key.replace(" ", "-").replace("_", "-")
     for k, structure in KNOWN_STRUCTURES.items():
         if k.replace("_", "-") == normalized_key:
             return structure.id
+        if structure.acronym.upper().replace("_", "-") == normalized_key:
+            return structure.id
+        for alias in structure.aliases:
+            if alias.upper().replace("_", "-") == normalized_key:
+                return structure.id
 
     raise ValueError(
         f"Structure '{struct_input}' inconnue du référentiel. "
@@ -129,6 +139,7 @@ def normalize_hal_id(hal_id: str | list[str] | None) -> str | None:
     Exemples :
     - 'halshs-00557065v1' -> 'halshs-00557065'
     - 'https://shs.hal.science/halshs-00557065v1' -> 'halshs-00557065'
+    - 'https://hal.science/hal-03707816/document' -> 'hal-03707816'
     - 'hal-03707816' -> 'hal-03707816'
     """
     if not hal_id:
@@ -143,13 +154,23 @@ def normalize_hal_id(hal_id: str | list[str] | None) -> str | None:
         raw = str(hal_id)
 
     cleaned = raw.strip()
-    # Supprimer les éventuels préfixes URL
+    # Retirer les éventuels paramètres de requête ou ancres
+    cleaned = cleaned.split("?")[0].split("#")[0]
+
+    # Supprimer les éventuels préfixes et sous-chemins d'URL (ex: /document, /file/...)
     if "/" in cleaned:
-        cleaned = cleaned.rstrip("/").split("/")[-1]
+        segments = [s for s in cleaned.rstrip("/").split("/") if s]
+        hal_pattern = re.compile(r"^[a-zA-Z0-9_-]+-\d+(?:v\d+)?$", re.IGNORECASE)
+        matched_segment = None
+        for seg in reversed(segments):
+            if hal_pattern.match(seg):
+                matched_segment = seg
+                break
+        cleaned = matched_segment if matched_segment is not None else segments[-1]
 
     # Supprimer le suffixe de version (ex: v1, v2)
     cleaned = re.sub(r"v\d+$", "", cleaned, flags=re.IGNORECASE)
-    return cleaned.strip() if cleaned else None
+    return cleaned.strip().lower() if cleaned else None
 
 
 def escape_solr_phrase_term(term: str) -> str:
@@ -283,7 +304,9 @@ def parse_hal_doc(doc: dict[str, Any]) -> ScholarlyWork:
         or "systematic review" in title_lower
         or "revue systématique" in title_lower
         or "meta-analysis" in abstract_lower
+        or "méta-analyse" in abstract_lower
         or "systematic review" in abstract_lower
+        or "revue systématique" in abstract_lower
     )
 
     return ScholarlyWork(
